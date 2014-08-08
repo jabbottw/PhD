@@ -1,0 +1,5 @@
+<RCC> 
+  <qresource prefix="/plugins/COGCC_Download" > 
+    <file>icon.png</file> 
+  </qresource> 
+</RCC> 
