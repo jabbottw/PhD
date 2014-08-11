@@ -29,7 +29,7 @@ import resources
 # Import the code for the dialogs
 from COGCC_DownloadDialog import COGCC_DownloadDialog
 
-# Imports for custom modules and classes
+# Imports custom modules and classes
 from pyIBrowser import *
 from pgAccessTool import *
 
@@ -37,7 +37,7 @@ class COGCC_Download:
 
   def __init__(self, iface):
     # Create a custum DataProcessor object to interact with the PhD Postgresql database
-    self.__DataProcessor = pgAccessTool.DataProcessor("PhD", "postgres", "admin", "localhost", "5432")
+    self.__DataProcessor = pgAccessTool.DataProcessor("phd", "postgres", "admin", "localhost", "5432")
     # Create a PyIBrowser Object for well data collection
     self.__WellDataCollector = pyIBrowser2.WellDataCollector("test")
     # Create an empty list to store all of the id values for the selected features in layer l
@@ -194,7 +194,7 @@ class COGCC_Download:
       geomList = fPointGeom.split(",")
       latitude = geomList[0][1:len(geomList[0])]
       longitude = geomList[1][0:(len(geomList[1])-1)]
-      stateList = self.__DataProcessor.getDBData("SELECT \"STATE\", geom FROM public.states WHERE ST_Contains(geom, ST_geomFromText('POINT(%s%s%s)', 4269))" % (latitude, " ", longitude))
+      stateList = self.__DataProcessor.getDBData("SELECT \"name\", geom FROM public.states WHERE ST_Contains(geom, ST_geomFromText('POINT(%s%s%s)', 4269))" % (latitude, " ", longitude))
       return stateList[0][0]
     except IndexError:
       self.createErrorMessage("Please make sure you have wells selected as well as the correct layer highlighted.")
