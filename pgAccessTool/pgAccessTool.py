@@ -1,6 +1,6 @@
 """
 /***************************************************************************
-Name		     : DataProcessor
+Name		     : DB_Processor
 Description          : Database query tool set
 Date                 : 5/9/2014
 copyright            : (C) 2014 by Julian Abbott-Whitley - PhD WFS
@@ -19,7 +19,7 @@ import sys
 
 # PostGreSQL data processor class
 # Establishes a connection to a specified PG database so information can be queried as needed
-class DataProcessor:
+class DB_Processor:
 
         # Class initiation
         #Requires the following parameters: DB name, DB username, DB password, Host location, port number
@@ -100,7 +100,7 @@ class DataProcessor:
 
 
         # Set new DB connection parameters
-        def setAllNewConnections(self, db, uName, pWord, host, port):
+        def setNewConnections(self, db, uName, pWord, host, port):
                 self.__db = db
                 self.__uName = uName
                 self.__pWord = pWord
@@ -109,7 +109,7 @@ class DataProcessor:
                 self.__con = psycopg2.connect(database="%s" % (self.db),user="%s" % (self.uName),password="%s" % (self.pWord),host="%s" % (self.host),port="%s" % (self.port))
         
         # Establishes a new connection with the database using the settings stored in the objects variables
-        def makeDB_Connection(self):
+        def makeConnection(self):
                 # Try block to make db connection
                 try:
                         # Make connection
@@ -176,22 +176,6 @@ class DataProcessor:
                 colList.append(i[int(col)])
             return colList
         
-        # Uses the existing db connection, self.__con connection to compare the information in the provided list against the db.
-        # The function inserts the provided variables into the predefined selection statement below.
-        # query = "select %s from %s where %s %s '%s'" % (retrievalItem, table, analysisCol, operator, i[colIndex])
-        # This allows for a dynamic sql statement to be created which uses a list of variables, along with a changing variable.
-        # The function is designed to work with a 2-dimensional array where the colIndex notes the column in the provided list containing the changing variable
-        # This function will return a list of all values that meet the given criteria
-        def createDynamic_SQL(self, retrievalItem, table, analysisCol, operator, listA, colIndex, ):
-            # Create an empty list to store the results of this process
-            resultList = []
-            # Cycle through each row with the provided list
-            for i in listA:
-                # Generate an sql query based on the provided variables and the current row/column of the provided list
-                query = "select %s from %s where %s %s '%s'" % (retrievalItem, table, analysisCol, operator, i[colIndex])
-                tmpList = DataProcessor.getDBData(self, query)
-                resultList.append(tmpList)
-            return resultList
         
         # Clean the default COGCC API provided by the state. This should be in the form of 05-xxx-xxxxx
         # This function will remove the dashes and tack on the last four zeros. 

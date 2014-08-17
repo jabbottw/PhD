@@ -23,11 +23,10 @@ from bs4 import BeautifulSoup
 
 # PostGreSQL data processor class
 # Establishes a connection to a specified PG database so information can be queried as needed
-class WellDataCollector:
+class Phd_Browser:
         # Class initiation
-        #Requires the following parameters: DB name, DB username, DB password, Host location, port number
         def __init__(self, word):
-            tmp = word
+            print 'pyIBrowser initiated'
             
         # Allows for a file to be downloaded without using the object variables
         def Download_COGCC_Data(self, seqNum, fClass, outputDir):
@@ -120,12 +119,12 @@ class WellDataCollector:
                                 
                                 ##################################################################################################### Delete line below
                                 print anchors[jx].get_text()
-                                '''
+                                
                                 r = requests.get(url)
                                 if r.status_code == 200:
                                     with open(filePath, "wb") as image:
                                         image.write(r.content)
-                                '''
+                                
                                 
                         else:
                             pass

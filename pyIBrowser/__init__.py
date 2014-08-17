@@ -22,4 +22,4 @@ def version():
     return "Version 0.1" 
 def qgisMinimumVersion():
     return "2.2.0"
-from pyIBrowser2 import WellDataCollector
+from pyIBrowser2 import Phd_Browser

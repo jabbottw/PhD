@@ -22,4 +22,4 @@ def version():
     return "Version 0.1" 
 def qgisMinimumVersion():
     return "2.2.0"
-from pgAccessTool import DataProcessor
+from pgAccessTool import DB_Processor
