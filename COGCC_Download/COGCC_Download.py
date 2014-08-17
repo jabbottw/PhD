@@ -313,31 +313,26 @@ class COGCC_Download:
             self.updateReportDialogMessage("%s%s" % ("Folder already exists for well --- ", currentAPI))
     
     def downloadUtah_Data(self, currentAPI):
-        # Start Utah download process
-        # Query data base to see if data has been downloaded for the current well
-        dbList = self.__DB_Processor.getDBData("select * from utah.ut_whf_dl_status where api_10 = '%s' AND well_proce = 'True'" %(currentAPI))
-        # If the dbList is empty, then the current well is not marked as processed in the data base, try and download data for this well. 
-        if not dbList:
-            # Download data for the current well
+        cleanApi = currentAPI + "0000"
+        # Check to see if the wellDir already exist, if not then create directory and download data
+        # If directory already exist, then skip this well.
+        # If the phd_Update variable is set to False, then this is a static download. Just download the files, without referencing the database. 
+        if self.__phd_Update == False:
+        # Download data for the current well
             dlStatus = self.__iBrowser.Download_Utah_Data(currentAPI, self.__folder)
-            # Update the current well within the database
+        else:           
             # Figure out if the current well exists in the DB
-            wellExists = self.__DB_Processor.getDBData("select * from utah.ut_whf_dl_status where api_10 = '%s'" %(currentAPI))
+            dlStatus = self.__DB_Processor.getDBData("SELECT * FROM utah.dl_report where api =  '%s'" %(cleanApi))
             # If well exists, update the status with the boolean results of the download
-            if wellExists:
-                sqlInput = "UPDATE utah.ut_whf_dl_status SET well_proce = '%s' WHERE api_10 = '%s'" % (dlStatus,currentAPI)
-                self.__DB_Processor.inputDBData(sqlInput)
-                sqlInput = ""
-            # Else add the well and update the status
+            if dlStatus == False:
+                    # Download data for the current well and update the database
+                    dlStatus = self.__iBrowser.Download_Utah_Data(currentAPI, self.__folder)
+                    sqlInput = ("INSERT INTO utah.dl_report (api, download, sid) VALUES (%s, 'Completed', Default)" % (cleanApi))
+                    dlStatus = self.__DB_Processor.inputDBData(sqlInput)
+                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- File Downloaded"))
             else:
-                sqlInput = ("INSERT INTO utah.ut_whf_dl_status (gid, api_10, api_14, well_proce, api_county)"
-                "VALUES ((select (max(gid)+1) from utah.ut_whf_dl_status),'%s','%s','%s','%s')" % (currentAPI, currentAPI + '0000', dlStatus, str(currentAPI[2:5])))
-                self.__DB_Processor.inputDBData(sqlInput)
-                sqlInput = ""
-            self.updateReportDialogMessage("%s%s" % (currentAPI, " --- File Downloaded"))
-        # Other wise, update the ui message to say that the current well has already been processed and move on to the next well.
-        else:
-            self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
+                    # Other wise, update the ui message to say that the current well has already been processed and move on to the next well
+                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
     
     
     ######################### Unload & Run #########################
