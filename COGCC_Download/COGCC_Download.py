@@ -25,7 +25,6 @@ from qgis.core import *
 from qgis.gui import *
 import qgis.utils
 import site
-from os.path import join
 # Initialize Qt resources from file resources.py
 import resources
 # Import the code for the dialogs
@@ -288,29 +287,24 @@ class COGCC_Download:
     def downloadCOGCC_Data(self, currentAPI):
         # Clean the COGCC API string, returns a full API value
         cleanApi = self.__DB_Processor.cleanCO_API(currentAPI)
-        # Create a folder name to store all of the CO well files for the current well being processed
-        wellDir = join(self.__folder, cleanApi)
-        # Check to see if the wellDir already exist, if not then create directory and download data
-        # If directory already exist, then skip this well.
-        if not os.path.exists(wellDir):
-            os.makedirs(wellDir)
-            # If the phd_Update variable is set to False, then this is a static download. Just download the files, without referencing the database. 
-            if self.__phd_Update == False:
-                dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, wellDir)
-                self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
-            # Otherwise, check the database to see if the current well has already been processed. If it hasn't, then process the current well. 
-            else:
-                # Check to see if the current well is stored in the database and is marked as processed
-                sql = "select * from colorado.dl_report where dl_report.api = '%s' AND download = 'Completed'" % (cleanApi)
-                dbList = self.__DB_Processor.getDBData(sql)
-                if not dbList:
-                    '''If the current well is ####### NOT ####### found in the data base, then start the cycle to collect data for this well'''
-                    dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, wellDir)
-                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
-                else:
-                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
+        # If the phd_Update variable is set to False, then this is a static download. Just download the files, without referencing the database. 
+        if self.__phd_Update == False:
+            dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, self.__folder)
+            self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
+        # Otherwise, check the database to see if the current well has already been processed. If it hasn't, then process the current well. 
         else:
-            self.updateReportDialogMessage("%s%s" % ("Folder already exists for well --- ", currentAPI))
+            # Check to see if the current well is stored in the database and is marked as processed
+            sql = "select * from colorado.dl_report where dl_report.api = '%s' AND download = 'Completed'" % (cleanApi)
+            dbList = self.__DB_Processor.getDBData(sql)
+            if not dbList:
+                '''If the current well is ####### NOT ####### found in the data base, then start the cycle to collect data for this well'''
+                dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, self.__folder)
+                self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
+                # Once file downloads, SQL command runs adding file to database of downloaded files, so keep up to date download database.
+                sql = "INSERT INTO colorado.dl_report (api, download) VALUES ('%s', 'Completed') RETURNING sid" % (cleanApi)
+                dbUpdate = self.__DB_Processor.inputDBData(sql)
+            else:
+                self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
     
     def downloadUtah_Data(self, currentAPI):
         # Start Utah download process

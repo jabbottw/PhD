@@ -124,7 +124,7 @@ class DB_Processor:
                         if self.__con:
                                 self.__con.close()
                                 
-        # Sends an SQL query to the database and returns the results in the form of a list                        
+        # Sends an SQL query to the database and returns the results in the form of a list    
         def getDBData(self, sqlString):
             # List object to store the results
             dbList = []
@@ -147,7 +147,7 @@ class DB_Processor:
                     
             except psycopg2.DatabaseError, e:
                 print 'Error %s%s' % (e, 'Couldn\'t establish a connection to the specified database. Please check your parameters and try again.') 
-                sys.exit(1)
+                
                 
         
         # Extracts a select column from a 2-dim list into a single list object
@@ -163,11 +163,9 @@ class DB_Processor:
                 return True
                 
             except psycopg2.DatabaseError, e:
-                if cur:
-                    cur.rollback()
                 print 'Error %s%s' % (e, 'Couldn\'t establish a connection to the specified database. Please check your parameters and try again.') 
                 return False
-                sys.exit(1)
+                
                 
         
         def extractListCol(self, listA, col):
