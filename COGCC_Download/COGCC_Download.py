@@ -313,20 +313,20 @@ class COGCC_Download:
         # If the phd_Update variable is set to False, then this is a static download. Just download the files, without referencing the database. 
         if self.__phd_Update == False:
         # Download data for the current well
-            dlStatus = self.__iBrowser.Download_Utah_Data(currentAPI, self.__folder)
+            dlStatus = self.__iBrowser.Download_Utah_Data(cleanApi, self.__folder)
         else:           
             # Figure out if the current well exists in the DB
-            dlStatus = self.__DB_Processor.getDBData("SELECT * FROM utah.dl_report where api =  '%s'" %(cleanApi))
+            dbList = self.__DB_Processor.getDBData("SELECT * FROM utah.dl_report where api =  '%s' AND download = 'Completed'" %(cleanApi))
             # If well exists, update the status with the boolean results of the download
-            if dlStatus == False:
+            if not dbList:
                     # Download data for the current well and update the database
                     dlStatus = self.__iBrowser.Download_Utah_Data(currentAPI, self.__folder)
-                    sqlInput = ("INSERT INTO utah.dl_report (api, download, sid) VALUES (%s, 'Completed', Default)" % (cleanApi))
-                    dlStatus = self.__DB_Processor.inputDBData(sqlInput)
-                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- File Downloaded"))
+                    self.updateReportDialogMessage("%s%s" % (cleanApi, " --- File Downloaded"))
+                    sql = "INSERT INTO utah.dl_report (api, download) VALUES ('%s', 'Completed') RETURNING sid" % (cleanApi)
+                    dbUtUpdate = self.__DB_Processor.inputDBData(sql)
             else:
                     # Other wise, update the ui message to say that the current well has already been processed and move on to the next well
-                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
+                    self.updateReportDialogMessage("%s%s" % (cleanApi, " --- already collected"))
     
     
     ######################### Unload & Run #########################
