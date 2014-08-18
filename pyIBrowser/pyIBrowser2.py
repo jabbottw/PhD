@@ -26,7 +26,8 @@ from bs4 import BeautifulSoup
 class Phd_Browser:
         # Class initiation
         def __init__(self, word):
-            print 'pyIBrowser initiated'
+            # need to extend the extDict to include other mime types, (i.e. xml, word docs...)
+            self.__extDict = {'application/octet-stream' : '.tiff', 'application/pdf' : '.pdf'}
             
         # Allows for a file to be downloaded without using the object variables
         def Download_COGCC_Data(self, seqNum, fClass, outputDir):
@@ -84,9 +85,7 @@ class Phd_Browser:
                                     html = response.read()
                                     # updates the soup objects
                                     soup = BeautifulSoup(html)
-                                    
-                                    ############################################################# Delete Line
-                                    ##print "%s%s" % ("\n\nPAGE: ", ix + 1)
+                                
 
                                     
                             else:
@@ -111,16 +110,18 @@ class Phd_Browser:
                                 fileCount = fileCount + 1
                                 # Remove shity characters
                                 fileName = re.sub('[\\\/:*?\'\"<>\|]','',fileName)
-                                # Set the file path
-                                filePath = os.path.join(outputDir, fileName)
                                 # Set the url using the current anchor element href
                                 url = "%s" % ("http://ogccweblink.state.co.us/" + anchors[jx].get("href"))
                                 # Get it!!!!
-                                
-                                ##################################################################################################### Delete line below
                                 print anchors[jx].get_text()
-                                
                                 r = requests.get(url)
+                                mime = r.headers['content-type']
+                                # Set the output file path, need to extend the extDict to include other mime types, (i.e. xml, word docs...)
+                                # Use try block because we might encounter unknown media type
+                                try:
+                                    filePath = os.path.join(outputDir, "%s%s" % (fileName, self.__extDict[mime]))
+                                except:
+                                    filePath = os.path.join(outputDir, fileName)
                                 if r.status_code == 200:
                                     with open(filePath, "wb") as image:
                                         image.write(r.content)
@@ -158,13 +159,18 @@ class Phd_Browser:
             # Download data
             try:
                 # Set the file name
-                fileName = "%s%s" % (seqNum, ".pdf")
-                # Set the file path
-                filePath = os.path.join(outputDir, fileName)
+                fileName = "%s" % (seqNum)
                 # Set the url for the current download
                 url = "%s%s%s%s" % ("http://oilgas.ogm.utah.gov/wellfiles/", seqNum[2:5],"/", fileName)
                 # Get it!!!
                 r = requests.get(url)
+                mime = r.headers['content-type']
+                # Set the output file path, need to extend the extDict to include other mime types, (i.e. xml, word docs...)
+                # Use try block because we might encounter unknown media type
+                try:
+                    filePath = os.path.join(outputDir, "%s%s" % (fileName, self.__extDict[mime]))
+                except:
+                    filePath = os.path.join(outputDir, fileName)
                 if r.status_code == 200:
                     with open(filePath, "wb") as image:
                         image.write(r.content)
