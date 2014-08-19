@@ -24,14 +24,11 @@ from PyQt4.QtGui import *
 from qgis.core import *
 from qgis.gui import *
 import qgis.utils
-import site
+from os.path import join
 # Initialize Qt resources from file resources.py
 import resources
 # Import the code for the dialogs
 from COGCC_DownloadDialog import COGCC_DownloadDialog
-
-# Imports custom modules and classes
-site.addsitedir(r'C:\Users\Julian\workspace\Eclipse\phd\dev')
 from pyIBrowser import *
 from pgAccessTool import *
 
@@ -285,26 +282,32 @@ class COGCC_Download:
     ###################### Well Download Methods ##################
     # Start COGCC Download process  
     def downloadCOGCC_Data(self, currentAPI):
-        # Clean the COGCC API string, returns a full API value
+        # Clean the COGCC API string, returns a full API value --> 05123123450000
         cleanApi = self.__DB_Processor.cleanCO_API(currentAPI)
-        # If the phd_Update variable is set to False, then this is a static download. Just download the files, without referencing the database. 
-        if self.__phd_Update == False:
-            dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, self.__folder)
-            self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
-        # Otherwise, check the database to see if the current well has already been processed. If it hasn't, then process the current well. 
-        else:
-            # Check to see if the current well is stored in the database and is marked as processed
-            sql = "select * from colorado.dl_report where dl_report.api = '%s' AND download = 'Completed'" % (cleanApi)
-            dbList = self.__DB_Processor.getDBData(sql)
-            if not dbList:
-                '''If the current well is ####### NOT ####### found in the data base, then start the cycle to collect data for this well'''
-                dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, self.__folder)
+        # Create a directory for the COGCC well data
+        outputFolder = join(self.__folder, cleanApi)
+        if not os.path.exists(outputFolder):
+            os.makedirs(outputFolder)
+            # If the phd_Update variable is set to False, then this is a static download. Just download the files, without referencing the database. 
+            if self.__phd_Update == False:
+                dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, outputFolder)
                 self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
-                # Once file downloads, SQL command runs adding file to database of downloaded files, so keep up to date download database.
-                sql = "INSERT INTO colorado.dl_report (api, download) VALUES ('%s', 'Completed') RETURNING sid" % (cleanApi)
-                dbUpdate = self.__DB_Processor.inputDBData(sql)
+            # Otherwise, check the database to see if the current well has already been processed. If it hasn't, then process the current well. 
             else:
-                self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
+                # Check to see if the current well is stored in the database and is marked as processed
+                sql = "select * from colorado.dl_report where dl_report.api = '%s' AND download = 'Completed'" % (cleanApi)
+                dbList = self.__DB_Processor.getDBData(sql)
+                if not dbList:
+                    '''If the current well is ####### NOT ####### found in the data base, then start the cycle to collect data for this well'''
+                    dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, outputFolder)
+                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
+                    # Once file downloads, SQL command runs adding file to database of downloaded files, so keep up to date download database.
+                    sql = "INSERT INTO colorado.dl_report (api, download) VALUES ('%s', 'Completed') RETURNING sid" % (cleanApi)
+                    dbUpdate = self.__DB_Processor.inputDBData(sql)
+                else:
+                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
+        else:
+            self.updateReportDialogMessage("%s%s" % ("Process not setup to over write existing files. There is already a folder created for API: ", currentAPI))
     
     def downloadUtah_Data(self, currentAPI):
         cleanApi = currentAPI + "0000"
