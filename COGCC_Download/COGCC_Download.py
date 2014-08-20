@@ -38,7 +38,7 @@ class COGCC_Download:
             # Create a custom DataProcessor object to interact with the PhD Postgresql database
             self.__DB_Processor = pgAccessTool.DB_Processor("phd", "postgres", "admin", "localhost", "5432")
             # Create a PyIBrowser Object for well data collection
-            self.__iBrowser = pyIBrowser2.Phd_Browser("test")
+            self.__iBrowser = pyIBrowser2.Phd_Browser('test')
             # Create an empty list to store all of the id values for the selected features in layer l
             self.__apiList = []
             # Attribute to note the state location of each well
@@ -109,23 +109,26 @@ class COGCC_Download:
         # Clear the UI output messages
         self.dlg.clearReportDialogBrowser()
         self.dlg.clearDownloadStatusBrowser()
-        # variable to store the currently selected layer
-        l = self.canvas.currentLayer()
-        # cycle through the selected features with layer l
-        features = l.selectedFeatures()
-        # Get the bounding state for the selected features
-        self.__currentState = self.getBoundingState(features)
-        # Update the well list based on the state reference
-        if self.__currentState == "Colorado":
-            # Update list using Colorado well data table
-            self.updateCOWellList(features)
-        elif self.__currentState == "Utah":
-            # Update list using Utah well data table
-            self.updateUTWellList(features)
-        else:
-            # Update list using default message
-            self.updateEmptyWellList()
-    
+        try:
+            # variable to store the currently selected layer
+            l = self.canvas.currentLayer()
+            # cycle through the selected features with layer l
+            features = l.selectedFeatures()
+            # Get the bounding state for the selected features
+            self.__currentState = self.getBoundingState(features)
+            # Update the well list based on the state reference
+            if self.__currentState == "Colorado":
+                # Update list using Colorado well data table
+                self.updateCOWellList(features)
+            elif self.__currentState == "Utah":
+                # Update list using Utah well data table
+                self.updateUTWellList(features)
+            else:
+                # Update list using default message
+                self.updateEmptyWellList()
+        except:
+            self.createErrorMessage("No Layer Selected.")
+            
     # Handles the 'select wells' button trigger
     def handleGetSelectionToolButton(self):
         qgis.utils.iface.actionSelectRectangle().trigger()
@@ -165,7 +168,7 @@ class COGCC_Download:
         self.dlg.clearReportDialogBrowser()
         self.createNewReportDialogMessage("")
         if self.__phd_Update:
-            print "Run phd update"
+            self.updateReportDialogMessage("Run phd update")
         # Cycle through the self.__apiList and pass each well id to the download module
         if len(self.__apiList) == 0:
             self.createErrorMessage("No Wells Selected.")
@@ -316,8 +319,10 @@ class COGCC_Download:
         # If the phd_Update variable is set to False, then this is a static download. Just download the files, without referencing the database. 
         if self.__phd_Update == False:
         # Download data for the current well
+            dlStatus = False
             dlStatus = self.__iBrowser.Download_Utah_Data(cleanApi, self.__folder)
-        else:           
+            print dlStatus
+        else:       
             # Figure out if the current well exists in the DB
             dbList = self.__DB_Processor.getDBData("SELECT * FROM utah.dl_report where api =  '%s' AND download = 'Completed'" %(cleanApi))
             # If well exists, update the status with the boolean results of the download
@@ -325,7 +330,7 @@ class COGCC_Download:
                     # Download data for the current well and update the database
                     dlStatus = self.__iBrowser.Download_Utah_Data(currentAPI, self.__folder)
                     self.updateReportDialogMessage("%s%s" % (cleanApi, " --- File Downloaded"))
-                    sql = "INSERT INTO utah.dl_report (api, download) VALUES ('%s', 'Completed') RETURNING sid" % (cleanApi)
+                    sql = "INSERT INTO utah.dl_report (api, download) VALUES ('%s', 'Completed')" % (cleanApi)
                     dbUtUpdate = self.__DB_Processor.inputDBData(sql)
             else:
                     # Other wise, update the ui message to say that the current well has already been processed and move on to the next well

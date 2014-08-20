@@ -25,13 +25,14 @@ from bs4 import BeautifulSoup
 # Establishes a connection to a specified PG database so information can be queried as needed
 class Phd_Browser:
         # Class initiation
-        def __init__(self, word):
+        def __init__(self, test="test"):
             # need to extend the extDict to include other mime types, (i.e. xml, word docs...)
             self.__extDict = {'application/octet-stream' : '.tiff', 'application/pdf' : '.pdf'}
             
         # Allows for a file to be downloaded without using the object variables
         def Download_COGCC_Data(self, seqNum, fClass, outputDir):
             dlFile = False
+            print "Fuck"
             ##################################################################################################### Delete line below
             print "%s%s%s" % ("\nAPI: ", seqNum, "\n")
             # List variable to count the number of pages on the current COGCC web page
@@ -84,10 +85,7 @@ class Phd_Browser:
                                     # Update html data
                                     html = response.read()
                                     # updates the soup objects
-                                    soup = BeautifulSoup(html)
-                                
-
-                                    
+                                    soup = BeautifulSoup(html)    
                             else:
                                 pass
                         # We need to document the current class value of the current well. This well tell us if we should download the well based on the provided perameters
@@ -108,7 +106,7 @@ class Phd_Browser:
                                 fileName = "05" + seqNum + "0000_" + str(fileCount) + "_" + anchors[jx].get_text()
                                 # Increment file count
                                 fileCount = fileCount + 1
-                                # Remove shity characters
+                                # Remove shit characters
                                 fileName = re.sub('[\\\/:*?\'\"<>\|]','',fileName)
                                 # Set the url using the current anchor element href
                                 url = "%s" % ("http://ogccweblink.state.co.us/" + anchors[jx].get("href"))
@@ -125,14 +123,11 @@ class Phd_Browser:
                                 if r.status_code == 200:
                                     with open(filePath, "wb") as image:
                                         image.write(r.content)
-                                        
-                                
-                                
                         else:
                             pass
                 # Clear out all variables
                 br = None
-                Soup = None
+                soup = None
                 html = None
                 response = None
                 fileName = None
@@ -145,7 +140,7 @@ class Phd_Browser:
                 print 'Error %s%s' % (e, 'Couldn\'t establish a connection to the proovided url. Please check settings and try again.') 
                 # Clear out all variables
                 br = None
-                Soup = None
+                soup = None
                 html = None
                 response = None
                 fileName = None
@@ -159,27 +154,28 @@ class Phd_Browser:
             # Download data
             try:
                 # Set the file name
-                fileName = "%s" % (seqNum)
+                fileName = "%s" % (seqNum[0:10])
                 # Set the url for the current download
-                url = "%s%s%s%s" % ("http://oilgas.ogm.utah.gov/wellfiles/", seqNum[2:5],"/", fileName)
+                url = "%s%s%s%s%s" % ("http://oilgas.ogm.utah.gov/wellfiles/", seqNum[2:5],"/", fileName, ".pdf")
                 # Get it!!!
                 r = requests.get(url)
                 mime = r.headers['content-type']
                 # Set the output file path, need to extend the extDict to include other mime types, (i.e. xml, word docs...)
                 # Use try block because we might encounter unknown media type
                 try:
-                    filePath = os.path.join(outputDir, "%s%s" % (fileName, self.__extDict[mime]))
+                    filePath = os.path.join(outputDir, "%s%s" % (seqNum, self.__extDict[mime]))
                 except:
-                    filePath = os.path.join(outputDir, fileName)
+                    filePath = os.path.join(outputDir, seqNum)
                 if r.status_code == 200:
                     with open(filePath, "wb") as image:
                         image.write(r.content)
+                else:
                 # Clear out all variables
-                fileName = None
-                filePath = None
-                url = None
-                r = None
-                return True
+                    fileName = None
+                    filePath = None
+                    url = None
+                    r = None
+                    return True
             
             except requests.ConnectionError, e:
                 print 'Error %s%s' % (e, 'Couldn\'t establish a connection to the proovided url. Please check settings and try again.') 
