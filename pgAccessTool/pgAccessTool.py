@@ -31,7 +31,6 @@ class DB_Processor:
             self.__port = port        # Port Number
             # Set the DB connection using the provided parameters
             self.__con = psycopg2.connect(database="%s" % (self.db),user="%s" % (self.uName),password="%s" % (self.pWord),host="%s" % (self.host),port="%s" % (self.port))
-            print 'db connection established'
 
         #### Getters Setters and Delete methods ####
         def get_db(self):
@@ -116,7 +115,6 @@ class DB_Processor:
                         self.__con = psycopg2.connect(database="%s" % (self.db),user="%s" % (self.uName),password="%s" % (self.pWord),host="%s" % (self.host),port="%s" % (self.port))
                 # Exception error
                 except psycopg2.DatabaseError, e:
-                        print 'Error %s%s' % (e, 'Couldn\'t establish a connection to the specified database. Please check your parameters and try again.') 
                         sys.exit(1)
         # Close the DB Connection
         def closeDBConnection(self):
@@ -146,7 +144,7 @@ class DB_Processor:
                 return dbList
                     
             except psycopg2.DatabaseError, e:
-                print 'Error %s%s' % (e, 'Couldn\'t establish a connection to the specified database. Please check your parameters and try again.') 
+                return dbList
                 
                 
         
@@ -163,7 +161,6 @@ class DB_Processor:
                 return True
                 
             except psycopg2.DatabaseError, e:
-                print 'Error %s%s' % (e, 'Couldn\'t establish a connection to the specified database. Please check your parameters and try again.') 
                 return False
                 
                 

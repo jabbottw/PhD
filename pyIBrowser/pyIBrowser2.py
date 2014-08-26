@@ -26,15 +26,13 @@ from bs4 import BeautifulSoup
 class Phd_Browser:
         # Class initiation
         def __init__(self, test="test"):
-            # need to extend the extDict to include other mime types, (i.e. xml, word docs...)
-            self.__extDict = {'application/octet-stream' : '.tiff', 'application/pdf' : '.pdf'}
+            self.__test = test
             
         # Allows for a file to be downloaded without using the object variables
         def Download_COGCC_Data(self, seqNum, fClass, outputDir):
             dlFile = False
-            print "Fuck"
-            ##################################################################################################### Delete line below
-            print "%s%s%s" % ("\nAPI: ", seqNum, "\n")
+            # need to extend the extDict to include other mime types, (i.e. xml, word docs...)
+            extDict = {'application/octet-stream' : '.pdf', 'application/pdf' : '.pdf'}
             # List variable to count the number of pages on the current COGCC web page
             pageLinks = ['1']
             # Counter - Some of the COGCC files have the same name. This variable allows us to create an 'index' number for every file
@@ -61,8 +59,6 @@ class Phd_Browser:
                 
                 # Cycle through the index numbers starting from 0 up to the number of pages
                 for ix in range(1, (len(pageLinks)+1)):
-                    ##################################################################################################### Delete line below
-                    print "%s%s%s" % ("\nPage: ", ix, "\n")
                     # Collect all anchor elements
                     anchors = soup.find_all('a')
                     # cycle from 1 up to the number of anchor elements
@@ -111,13 +107,12 @@ class Phd_Browser:
                                 # Set the url using the current anchor element href
                                 url = "%s" % ("http://ogccweblink.state.co.us/" + anchors[jx].get("href"))
                                 # Get it!!!!
-                                print anchors[jx].get_text()
                                 r = requests.get(url)
                                 mime = r.headers['content-type']
                                 # Set the output file path, need to extend the extDict to include other mime types, (i.e. xml, word docs...)
                                 # Use try block because we might encounter unknown media type
                                 try:
-                                    filePath = os.path.join(outputDir, "%s%s" % (fileName, self.__extDict[mime]))
+                                    filePath = os.path.join(outputDir, "%s%s" % (fileName, extDict[mime]))
                                 except:
                                     filePath = os.path.join(outputDir, fileName)
                                 if r.status_code == 200:
@@ -137,7 +132,6 @@ class Phd_Browser:
                 return True
            
             except requests.ConnectionError, e:
-                print 'Error %s%s' % (e, 'Couldn\'t establish a connection to the proovided url. Please check settings and try again.') 
                 # Clear out all variables
                 br = None
                 soup = None
@@ -152,6 +146,8 @@ class Phd_Browser:
         
         def Download_Utah_Data(self, seqNum, outputDir):
             # Download data
+            # need to extend the extDict to include other mime types, (i.e. xml, word docs...)
+            extDict = {'application/octet-stream' : '.pdf', 'application/pdf' : '.pdf'}
             try:
                 # Set the file name
                 fileName = "%s" % (seqNum[0:10])
@@ -163,7 +159,7 @@ class Phd_Browser:
                 # Set the output file path, need to extend the extDict to include other mime types, (i.e. xml, word docs...)
                 # Use try block because we might encounter unknown media type
                 try:
-                    filePath = os.path.join(outputDir, "%s%s" % (seqNum, self.__extDict[mime]))
+                    filePath = os.path.join(outputDir, "%s%s" % (seqNum, extDict[mime]))
                 except:
                     filePath = os.path.join(outputDir, seqNum)
                 if r.status_code == 200:
@@ -178,7 +174,6 @@ class Phd_Browser:
                     return True
             
             except requests.ConnectionError, e:
-                print 'Error %s%s' % (e, 'Couldn\'t establish a connection to the proovided url. Please check settings and try again.') 
                 # Clear out all variables
                 fileName = None
                 filePath = None

@@ -57,6 +57,8 @@ class COGCC_Download:
             self.canvas = self.iface.mapCanvas()
             # Make a connection to the dialog 
             self.dlg = COGCC_DownloadDialog()
+            # Make a debugger variable for testing
+            self.debbug = False
     
     #########################   Init GUI  #########################
     
@@ -289,29 +291,27 @@ class COGCC_Download:
         cleanApi = self.__DB_Processor.cleanCO_API(currentAPI)
         # Create a directory for the COGCC well data
         outputFolder = join(self.__folder, cleanApi)
-        if not os.path.exists(outputFolder):
-            os.makedirs(outputFolder)
             # If the phd_Update variable is set to False, then this is a static download. Just download the files, without referencing the database. 
-            if self.__phd_Update == False:
+        if self.__phd_Update == False:
+            self.makeFolder(outputFolder, currentAPI)
+            dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, outputFolder)
+            self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
+        # Otherwise, check the database to see if the current well has already been processed. If it hasn't, then process the current well. 
+        else:
+            # Check to see if the current well is stored in the database and is marked as processed
+            sql = "select * from colorado.dl_report where dl_report.api = '%s'" % (cleanApi)
+            dbList = self.__DB_Processor.getDBData(sql)
+            if not dbList:
+                '''If the current well is ####### NOT ####### found in the data base, then start the cycle to collect data for this well'''
+                self.makeFolder(outputFolder, currentAPI)
                 dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, outputFolder)
                 self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
-            # Otherwise, check the database to see if the current well has already been processed. If it hasn't, then process the current well. 
+                # Once file downloads, SQL command runs adding file to database of downloaded files, so keep up to date download database.
+                sql = "INSERT INTO colorado.dl_report (api, download) VALUES ('%s', 'Processed')" % (cleanApi)
+                dbUpdate = self.__DB_Processor.inputDBData(sql)
             else:
-                # Check to see if the current well is stored in the database and is marked as processed
-                sql = "select * from colorado.dl_report where dl_report.api = '%s' AND download = 'Completed'" % (cleanApi)
-                dbList = self.__DB_Processor.getDBData(sql)
-                if not dbList:
-                    '''If the current well is ####### NOT ####### found in the data base, then start the cycle to collect data for this well'''
-                    dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, outputFolder)
-                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
-                    # Once file downloads, SQL command runs adding file to database of downloaded files, so keep up to date download database.
-                    sql = "INSERT INTO colorado.dl_report (api, download) VALUES ('%s', 'Completed') RETURNING sid" % (cleanApi)
-                    dbUpdate = self.__DB_Processor.inputDBData(sql)
-                else:
-                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
-        else:
-            self.updateReportDialogMessage("%s%s" % ("Process not setup to over write existing files. There is already a folder created for API: ", currentAPI))
-    
+                self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
+                    
     def downloadUtah_Data(self, currentAPI):
         cleanApi = currentAPI + "0000"
         # Check to see if the wellDir already exist, if not then create directory and download data
@@ -321,22 +321,32 @@ class COGCC_Download:
         # Download data for the current well
             dlStatus = False
             dlStatus = self.__iBrowser.Download_Utah_Data(cleanApi, self.__folder)
-            print dlStatus
         else:       
             # Figure out if the current well exists in the DB
-            dbList = self.__DB_Processor.getDBData("SELECT * FROM utah.dl_report where api =  '%s' AND download = 'Completed'" %(cleanApi))
+            dbList = self.__DB_Processor.getDBData("SELECT * FROM utah.dl_report where api =  '%s'" %(cleanApi))
             # If well exists, update the status with the boolean results of the download
             if not dbList:
                     # Download data for the current well and update the database
                     dlStatus = self.__iBrowser.Download_Utah_Data(currentAPI, self.__folder)
                     self.updateReportDialogMessage("%s%s" % (cleanApi, " --- File Downloaded"))
-                    sql = "INSERT INTO utah.dl_report (api, download) VALUES ('%s', 'Completed')" % (cleanApi)
+                    sql = "INSERT INTO utah.dl_report (api, download) VALUES ('%s', 'Processed')" % (cleanApi)
                     dbUtUpdate = self.__DB_Processor.inputDBData(sql)
             else:
                     # Other wise, update the ui message to say that the current well has already been processed and move on to the next well
                     self.updateReportDialogMessage("%s%s" % (cleanApi, " --- already collected"))
     
+    def makeFolder(self, outputFolder, api):
+        if not os.path.exists(outputFolder):
+            os.makedirs(outputFolder)
+        else:
+            self.updateReportDialogMessage("%s%s" % ("Process not setup to over write existing files. There is already a folder created for API: ", api))
     
+    def debugger(self, message = []):
+        if self.debbug:
+            outut = ''
+            for ix in range(0, len(message)):
+                output = message[ix] + ' '
+            print output
     ######################### Unload & Run #########################
           
     def unload(self):
