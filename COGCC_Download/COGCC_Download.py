@@ -306,9 +306,10 @@ class COGCC_Download:
                 self.makeFolder(outputFolder, currentAPI)
                 dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, outputFolder)
                 self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
-                # Once file downloads, SQL command runs adding file to database of downloaded files, so keep up to date download database.
-                sql = "INSERT INTO colorado.dl_report (api, download) VALUES ('%s', 'Processed')" % (cleanApi)
-                dbUpdate = self.__DB_Processor.inputDBData(sql)
+                if dlStatus:
+                    # Once file downloads, SQL command runs adding file to database of downloaded files, so keep up to date download database.
+                    sql = "INSERT INTO colorado.dl_report (api, download) VALUES ('%s', 'Processed')" % (cleanApi)
+                    dbUpdate = self.__DB_Processor.inputDBData(sql)
             else:
                 self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
                     
@@ -330,7 +331,8 @@ class COGCC_Download:
                     dlStatus = self.__iBrowser.Download_Utah_Data(currentAPI, self.__folder)
                     self.updateReportDialogMessage("%s%s" % (cleanApi, " --- File Downloaded"))
                     sql = "INSERT INTO utah.dl_report (api, download) VALUES ('%s', 'Processed')" % (cleanApi)
-                    dbUtUpdate = self.__DB_Processor.inputDBData(sql)
+                    if dlStatus:
+                        dbUtUpdate = self.__DB_Processor.inputDBData(sql)
             else:
                     # Other wise, update the ui message to say that the current well has already been processed and move on to the next well
                     self.updateReportDialogMessage("%s%s" % (cleanApi, " --- already collected"))
