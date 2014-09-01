@@ -331,8 +331,7 @@ class COGCC_Download:
                     dlStatus = self.__iBrowser.Download_Utah_Data(currentAPI, self.__folder)
                     self.updateReportDialogMessage("%s%s" % (cleanApi, " --- File Downloaded"))
                     sql = "INSERT INTO utah.dl_report (api, download) VALUES ('%s', 'Processed')" % (cleanApi)
-                    if dlStatus:
-                        dbUtUpdate = self.__DB_Processor.inputDBData(sql)
+                    dbUtUpdate = self.__DB_Processor.inputDBData(sql)
             else:
                     # Other wise, update the ui message to say that the current well has already been processed and move on to the next well
                     self.updateReportDialogMessage("%s%s" % (cleanApi, " --- already collected"))

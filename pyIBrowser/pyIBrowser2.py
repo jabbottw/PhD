@@ -103,7 +103,7 @@ class Phd_Browser:
                                 # Increment file count
                                 fileCount = fileCount + 1
                                 # Remove shit characters
-                                fileName = re.sub('[\\\/:*?\'\"<>\|]','',fileName)
+                                fileName = re.sub('[\\\/:*?\'\"<>\|\\r\\n]','',fileName)
                                 # Set the url using the current anchor element href
                                 url = "%s" % ("http://ogccweblink.state.co.us/" + anchors[jx].get("href"))
                                 # Get it!!!!
@@ -159,7 +159,7 @@ class Phd_Browser:
                 # Set the output file path, need to extend the extDict to include other mime types, (i.e. xml, word docs...)
                 # Use try block because we might encounter unknown media type
                 try:
-                    filePath = os.path.join(outputDir, "%s%s" % (seqNum, extDict[mime]))
+                    filePath = os.path.join(outputDir, "%s%s%s" % (seqNum, '0000', extDict[mime]))
                 except:
                     filePath = os.path.join(outputDir, seqNum)
                 if r.status_code == 200:

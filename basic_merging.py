@@ -4,7 +4,8 @@ from os.path import join
 import re
 import os
 print "start merge" 
-rootdir = r'C:\Users\Julian\workspace\Eclipse\phd\dls'
+rootdir = r'H:\ColoradoUpdate'
+outdir = r'H:\ColoradoUpdate\updates'
 
             
 def tryint(s):
@@ -41,7 +42,7 @@ for subdir, dirs, files in os.walk(rootdir):
                 merger.append(open(join(subdir, f), "rb"))            
             except:
                 print "Couldn't add file: " + f
-        output = join(rootdir, outFileName + '.pdf')
+        output = join(outdir, outFileName + '_PhD_WellFile.pdf')
         print "Writing Output file: " + output
         merger.write(output)
         
