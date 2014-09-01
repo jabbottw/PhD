@@ -4,7 +4,7 @@ from os.path import join
 import re
 import os
 print "start merge" 
-rootdir = r'H:\ColoradoUpdate'
+rootdir = r'H:\ColoradoUpdate\rawFiles'
 outdir = r'H:\ColoradoUpdate\updates'
 
             
@@ -25,27 +25,32 @@ def sort_nicely(l):
     """
     l.sort(key=alphanum_key)
 
-
 # Main function to merge all pdf files
+outputReport = []
 for subdir, dirs, files in os.walk(rootdir):
-    merger = PdfFileMerger()
-    if subdir[-4:] == "0000":
-        outFileName = subdir[-14:]
-        print "Folder: " + outFileName
-        fileArray = []
-        for f in files:
-            fileArray.append(join(subdir,f))
-        sort_nicely(fileArray)
-        for f in fileArray:
-            try:
-                print "Merging: " + join(subdir, f)
-                merger.append(open(join(subdir, f), "rb"))            
-            except:
-                print "Couldn't add file: " + f
-        output = join(outdir, outFileName + '_PhD_WellFile.pdf')
-        print "Writing Output file: " + output
-        merger.write(output)
-        
+        merger = PdfFileMerger()
+        if subdir[-4:] == "0000":
+            outFileName = subdir[-14:]
+            output = join(outdir, outFileName + '_PhD_WellFile.pdf')
+            if not os.path.exists(output):
+                print "Folder: " + outFileName
+                fileArray = []
+                for f in files:
+                    fileArray.append(join(subdir,f))
+                sort_nicely(fileArray)
+                for f in fileArray:
+                    try:
+                        print "Merging: " + join(subdir, f)
+                        merger.append(open(join(subdir, f), "rb"))            
+                    except:
+                        print "Couldn't add file: " + f
+                print "Writing Output file: " + output
+                try:
+                    merger.write(output)
+                except:
+                    outputReport.append("Couldn't create file: " + subdir[-14:])
+for i in outputReport:
+    print i
         
         
 ''' Some sample notes on the pdf merge process
