@@ -12,7 +12,7 @@ email                : jwhitley@phdwellfile.com
  *   This program has been developed for use by PhD well file services.     *
  *                                                                         *
  ***************************************************************************/
- """
+"""
 # Import necessary libraries
 import mechanize
 import requests
@@ -33,6 +33,8 @@ class Phd_Browser:
             dlFile = False
             # need to extend the extDict to include other mime types, (i.e. xml, word docs...)
             extDict = {'application/octet-stream' : '.pdf', 'application/pdf' : '.pdf'}
+            # search list for logs to download
+            log_list = ['mud', 'core', 'cores']
             # List variable to count the number of pages on the current COGCC web page
             pageLinks = ['1']
             # Counter - Some of the COGCC files have the same name. This variable allows us to create an 'index' number for every file
@@ -91,7 +93,9 @@ class Phd_Browser:
                                     dlFile = True
                                 elif fClass == "whfs" and (anchors[jx].get_text() == "Wells" or anchors[jx].get_text() == "Facilities" or anchors[jx].get_text() == "Operator"):
                                     dlFile = True
-                                elif fClass == "logs" and anchors[jx].get_text() == "Well Logs" or anchors[jx].get_text() == "Projects":
+                                # This method is really designed for the Mud log and core search search, not really logs specifically. Need to reinsert the following comment into the fClass == conditional statement
+                                #"""(anchors[jx].get_text() == "Wells" or anchors[jx].get_text() == "Well Logs" or anchors[jx].get_text() == "Projects") and"""
+                                elif fClass == "logs" and self.find_substring(anchors[jx+2].get_text(), log_list): 
                                     dlFile = True
                                 else:
                                     dlFile = False
@@ -183,5 +187,37 @@ class Phd_Browser:
                 sys.exit(1)
             
             
-        
+        # utility methods
+        def find_substring(self, key_words, word_list):
+            ''' search for a key word within the provided search string
+            Handles case sensitivity by converting all words to a lower case representation
+            method returns a boolean true false value'''
+            # split search string into it's indavidual words
+            key_word_list = key_words.split()
+            for kw in key_word_list:
+                for word in word_list:
+                    if kw.lower() == word.lower():
+                        return True
+                return False
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             

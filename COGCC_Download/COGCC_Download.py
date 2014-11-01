@@ -204,7 +204,13 @@ class COGCC_Download:
             return stateList[0][0]
         except IndexError:
             self.createErrorMessage("Please make sure you have wells selected as well as the correct layer highlighted.")
-    
+            
+    def remove_empty_dir(self, dir_folder):
+        """ Removes the passed in dir path if it does not contain any files """
+        try:
+            os.rmdir(dir_folder)
+        except:
+            self.updateReportDialogMessage("%s" % ("directory not empty"))
     
     ###################### Update Well List Methods ##################      
     def updateCOWellList(self, coFeatures):
@@ -298,20 +304,36 @@ class COGCC_Download:
             self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
         # Otherwise, check the database to see if the current well has already been processed. If it hasn't, then process the current well. 
         else:
-            # Check to see if the current well is stored in the database and is marked as processed
-            sql = "select * from colorado.dl_report where dl_report.api = '%s'" % (cleanApi)
-            dbList = self.__DB_Processor.getDBData(sql)
-            if not dbList:
-                '''If the current well is ####### NOT ####### found in the data base, then start the cycle to collect data for this well'''
-                self.makeFolder(outputFolder, currentAPI)
-                dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, outputFolder)
-                self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
-                if dlStatus:
-                    # Once file downloads, SQL command runs adding file to database of downloaded files, so keep up to date download database.
-                    sql = "INSERT INTO colorado.dl_report (api, download) VALUES ('%s', 'Processed')" % (cleanApi)
-                    dbUpdate = self.__DB_Processor.inputDBData(sql)
-            else:
-                self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
+            if self.__COGCC_fClass == "whfs":
+                # Check to see if the current well is stored in the database and is marked as processed
+                sql = "select * from colorado.dl_report where dl_report.api = '%s'" % (cleanApi)
+                dbList = self.__DB_Processor.getDBData(sql)
+                if not dbList:
+                    '''If the current well is ####### NOT ####### found in the data base, then start the cycle to collect data for this well'''
+                    self.makeFolder(outputFolder, currentAPI)
+                    dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, outputFolder)
+                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
+                    if dlStatus:
+                        # Once file downloads, SQL command runs adding file to database of downloaded files, so keep up to date download database.
+                        sql = "INSERT INTO colorado.dl_report (api, download) VALUES ('%s', 'Processed')" % (cleanApi)
+                        dbUpdate = self.__DB_Processor.inputDBData(sql)
+                else:
+                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
+            elif self.__COGCC_fClass == "logs":
+                # Check to see if the current well is stored in the database and is marked as processed
+                sql = "select * from colorado.well_log_report where well_log_report.api = '%s'" % (cleanApi)
+                dbList = self.__DB_Processor.getDBData(sql)
+                if not dbList:
+                    '''If the current well is ####### NOT ####### found in the data base, then start the cycle to collect data for this well'''
+                    self.makeFolder(outputFolder, currentAPI)
+                    dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, outputFolder)
+                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
+                    if dlStatus:
+                        # Once file downloads, SQL command runs adding file to database of downloaded files, so keep up to date download database.
+                        sql = "INSERT INTO colorado.well_log_report (api, download) VALUES ('%s', 'Processed')" % (cleanApi)
+                        dbUpdate = self.__DB_Processor.inputDBData(sql)
+                else:
+                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
                     
     def downloadUtah_Data(self, currentAPI):
         cleanApi = currentAPI + "0000"
