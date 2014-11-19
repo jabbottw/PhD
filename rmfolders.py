@@ -1,5 +1,3 @@
-
-
 import os
 from os.path import join, isdir
 from os import listdir
@@ -11,4 +9,4 @@ def rm_empty_dirs(root):
                      try:
                              os.rmdir(file)
                      except:
-                             print "----> %s" % f
+                             print "not empty"
