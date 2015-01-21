@@ -31,7 +31,8 @@ class DB_Processor:
             self.__port = port        # Port Number
             # Set the DB connection using the provided parameters
             self.__con = psycopg2.connect(database="%s" % (self.db),user="%s" % (self.uName),password="%s" % (self.pWord),host="%s" % (self.host),port="%s" % (self.port))
-
+            self.__status_dict = {0 : 'completed', 1 : 'processing', 2 : 'interrupted'}
+            
         #### Getters Setters and Delete methods ####
         def get_db(self):
             return self.__db
@@ -98,32 +99,33 @@ class DB_Processor:
 ################  Utility Methods  ################
 
 
-        # Set new DB connection parameters
         def setNewConnections(self, db, uName, pWord, host, port):
-                self.__db = db
-                self.__uName = uName
-                self.__pWord = pWord
-                self.__host = host
-                self.__port = port
-                self.__con = psycopg2.connect(database="%s" % (self.db),user="%s" % (self.uName),password="%s" % (self.pWord),host="%s" % (self.host),port="%s" % (self.port))
+            """ Set new DB connection parameters """
+            self.__db = db
+            self.__uName = uName
+            self.__pWord = pWord
+            self.__host = host
+            self.__port = port
+            self.__con = psycopg2.connect(database="%s" % (self.db),user="%s" % (self.uName),password="%s" % (self.pWord),host="%s" % (self.host),port="%s" % (self.port))
         
-        # Establishes a new connection with the database using the settings stored in the objects variables
         def makeConnection(self):
-                # Try block to make db connection
-                try:
-                        # Make connection
-                        self.__con = psycopg2.connect(database="%s" % (self.db),user="%s" % (self.uName),password="%s" % (self.pWord),host="%s" % (self.host),port="%s" % (self.port))
-                # Exception error
-                except psycopg2.DatabaseError, e:
-                        sys.exit(1)
-        # Close the DB Connection
+            """ Establishes a new connection with the database using the settings stored in the objects variables"""
+            # Try block to make db connection
+            try:
+                    # Make connection
+                    self.__con = psycopg2.connect(database="%s" % (self.db),user="%s" % (self.uName),password="%s" % (self.pWord),host="%s" % (self.host),port="%s" % (self.port))
+            # Exception error
+            except psycopg2.DatabaseError, e:
+                   print 'error'
+        
+
         def closeDBConnection(self):
-                # Close  the connection
-                        if self.__con:
-                                self.__con.close()
-                                
-        # Sends an SQL query to the database and returns the results in the form of a list    
+            """ Close the DB Connection """
+            if self.__con:
+                    self.__con.close()
+                                   
         def getDBData(self, sqlString):
+            """ Sends an SQL query to the database and returns the results in the form of a list """
             # List object to store the results
             dbList = []
             try:
@@ -144,15 +146,14 @@ class DB_Processor:
                 return dbList
                     
             except psycopg2.DatabaseError, e:
+                self.__con.rollback()
                 return dbList
                 
                 
-        
-        # Extracts a select column from a 2-dim list into a single list object
-        
-        # Input data using a basic sql statement
-        # This process will simply take the provided statement, execute the statement, and commit the results
-        def inputDBData(self, sqlInput):
+        def run_sql(self, sqlInput):
+            """ Executes a basic sql statement
+                This process will simply take the provided statement, execute the statement, and commit the results
+                return a boolean value depending on the results of the process """
             #  try except block
             try:
                 cur = self.__con.cursor()
@@ -161,31 +162,44 @@ class DB_Processor:
                 return True
                 
             except psycopg2.DatabaseError, e:
+                self.__con.rollback()
                 return False
                 
                 
-        
         def extractListCol(self, listA, col):
             colList = []
             for i in listA:
                 colList.append(i[int(col)])
             return colList
         
+        def check_api_status(self, schema, table, api):
+            """ Check for the existence of the passed api within the specified database schema and table 
+                Returns a -1 if the api exists but is not marked as completed.
+                Returns a 0 if the api exists and is marked as completed.
+                Returns a 1 if the api does not exist at all 
+                self.__status_dict = {0 : 'completed', 1 : 'processing', 2 : 'interrupted', }"""
+            x = 0
+            sql = "select api from %s.%s where api = '%s' and download = '%s'" % (schema, table, api, self.__status_dict[0])
+            l = self.getDBData(sql)
+            if not l:
+                sql = "select api from %s.%s where api = '%s' and download != '%s'" % (schema, table, api, self.__status_dict[0])
+                l = self.getDBData(sql)
+                if l: x = -1
+                else: x = 1  
+            return x
         
-        # Clean the default COGCC API provided by the state. This should be in the form of 05-xxx-xxxxx
-        # This function will remove the dashes and tack on the last four zeros. 
-        def cleanCO_API(self,api):
-            # Split the provided api into a list using the dashes
-            apiSplit = api.split("-")
-            # Create the final variable to be returned
-            apiConcat = ""
-            # Concate the list into a single variable
-            for i in apiSplit:
-                apiConcat = "%s%s" % (apiConcat, i)
-            # Add the final four zeros if len of the current api = 10
-            if (len(apiConcat) == 10):
-                apiConcat = "%s%s" % (apiConcat, "0000")
-            if (len(apiConcat) == 12):
-                apiConcat = "%s%s" % (apiConcat, "00")
-            return apiConcat
+        def insert_api(self, schema, table, api, v):
+            """ Insert the passed api value into the database. Set the download column using the v integer variable 
+                self.__status_dict = {0 : 'completed', 1 : 'processing', 2 : 'interrupted'}"""
+            sql = "INSERT INTO %s.%s (api, download) VALUES ('%s', '%s')" % (schema, table, api, self.__status_dict[v])
+            r = self.run_sql(sql)
+            return r
 
+        def update_download_status(self, schema, table, api, v):
+            """ Update the download column for the specfied well within the spcified schema and table 
+                Status value is an integer data key used on the self.__status_dict vaariable
+                self.__status_dict = {0 : 'completed', 1 : 'processing', 2 : 'interrupted'}"""
+            sql = "update %s.%s set download = '%s' where api = '%s'" % (schema, table, self.__status_dict[v], api)
+            r = self.run_sql(sql)
+            return r
+            

@@ -24,7 +24,8 @@ from PyQt4.QtGui import *
 from qgis.core import *
 from qgis.gui import *
 import qgis.utils
-from os.path import join
+from os.path import join, isdir
+import utils
 # Initialize Qt resources from file resources.py
 import resources
 # Import the code for the dialogs
@@ -41,6 +42,10 @@ class COGCC_Download:
             self.__iBrowser = pyIBrowser2.Phd_Browser('test')
             # Create an empty list to store all of the id values for the selected features in layer l
             self.__apiList = []
+            # empty list to store the interrupted downloads
+            self.__interuption_list = []
+            # variable to count the download attempts on the interuption wells
+            self.__interuption_attempts = 0
             # Attribute to note the state location of each well
             self._currentState = ""
             # Create a variable to store the directory
@@ -59,6 +64,7 @@ class COGCC_Download:
             self.dlg = COGCC_DownloadDialog()
             # Make a debugger variable for testing
             self.debbug = False
+    
     
     #########################   Init GUI  #########################
     
@@ -182,12 +188,19 @@ class COGCC_Download:
                 if self.__apiList[ix][0:2] == "05":
                     self.downloadCOGCC_Data(self.__apiList[ix])
                     dirLocMessage = "%s%s" % ("\nFiles downloaded to the following root directory: \n", self.__folder)
+                    self.remove_empty_dir(self.__folder, self.__apiList[ix])
                 elif self.__apiList[ix][0:2] == "43":
                     self.downloadUtah_Data(self.__apiList[ix])
                     dirLocMessage = "%s%s" % ("\nFiles downloaded to the following root directory: \n", self.__folder)
                 else:
                     self.createErrorMessage("There has not been a process set up to pull data for the selected wells.")
             self.updateReportDialogMessage("%s" % (dirLocMessage))
+            if self.__interuption_list and self.__interuption_attempts < 3:
+                self.__interuption_attempts += 1
+                self.__apiList = self.__interuption_list
+                self.__interuption_list = []
+                self.handlegetWellDataButton()
+                 
           
     #########################   Utility Methods  #########################
     
@@ -205,13 +218,17 @@ class COGCC_Download:
         except IndexError:
             self.createErrorMessage("Please make sure you have wells selected as well as the correct layer highlighted.")
             
-    def remove_empty_dir(self, dir_folder):
+    def remove_empty_dir(self, dir_folder, api):
         """ Removes the passed in dir path if it does not contain any files """
-        try:
-            os.rmdir(dir_folder)
-        except:
-            self.updateReportDialogMessage("%s" % ("directory not empty"))
-    
+        api = utils.cleanCO_API(api)
+        dir_folder = join(dir_folder, api)
+        if isdir(dir_folder):
+            if os.listdir(dir_folder) == []:
+                try:
+                    os.rmdir(dir_folder)
+                except:
+                    pass
+        
     ###################### Update Well List Methods ##################      
     def updateCOWellList(self, coFeatures):
         # Clear the current API list
@@ -294,75 +311,88 @@ class COGCC_Download:
     # Start COGCC Download process  
     def downloadCOGCC_Data(self, currentAPI):
         # Clean the COGCC API string, returns a full API value --> 05123123450000
-        cleanApi = self.__DB_Processor.cleanCO_API(currentAPI)
-        # Create a directory for the COGCC well data
-        outputFolder = join(self.__folder, cleanApi)
-            # If the phd_Update variable is set to False, then this is a static download. Just download the files, without referencing the database. 
+        cleanApi = utils.cleanCO_API(currentAPI)
+        # If the phd_Update variable is set to False, then this is a static download. Just download the files, without referencing the database. 
         if self.__phd_Update == False:
-            self.makeFolder(outputFolder, currentAPI)
+            utils.makeFolder(outputFolder, currentAPI)
             dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, outputFolder)
             self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
         # Otherwise, check the database to see if the current well has already been processed. If it hasn't, then process the current well. 
         else:
-            if self.__COGCC_fClass == "whfs":
-                # Check to see if the current well is stored in the database and is marked as processed
-                sql = "select * from colorado.dl_report where dl_report.api = '%s'" % (cleanApi)
-                dbList = self.__DB_Processor.getDBData(sql)
-                if not dbList:
-                    '''If the current well is ####### NOT ####### found in the data base, then start the cycle to collect data for this well'''
-                    self.makeFolder(outputFolder, currentAPI)
-                    dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, outputFolder)
-                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
-                    if dlStatus:
-                        # Once file downloads, SQL command runs adding file to database of downloaded files, so keep up to date download database.
-                        sql = "INSERT INTO colorado.dl_report (api, download) VALUES ('%s', 'Processed')" % (cleanApi)
-                        dbUpdate = self.__DB_Processor.inputDBData(sql)
-                else:
-                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
-            elif self.__COGCC_fClass == "logs":
-                # Check to see if the current well is stored in the database and is marked as processed
-                sql = "select * from colorado.well_log_report where well_log_report.api = '%s'" % (cleanApi)
-                dbList = self.__DB_Processor.getDBData(sql)
-                if not dbList:
-                    '''If the current well is ####### NOT ####### found in the data base, then start the cycle to collect data for this well'''
-                    self.makeFolder(outputFolder, currentAPI)
-                    dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, outputFolder)
-                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
-                    if dlStatus:
-                        # Once file downloads, SQL command runs adding file to database of downloaded files, so keep up to date download database.
-                        sql = "INSERT INTO colorado.well_log_report (api, download) VALUES ('%s', 'Processed')" % (cleanApi)
-                        dbUpdate = self.__DB_Processor.inputDBData(sql)
-                else:
-                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already collected"))
+            self.cogcc_data_collector(currentAPI, cleanApi)
+                
+    def cogcc_data_collector(self, currentAPI, cleanApi):
+        # Create a directory for the COGCC well data
+        outputFolder = join(self.__folder, cleanApi)
+        # Colorado documentation tables
+        co_doc_tables = {'whfs' :  'dl_report', 'logs' : 'well_log_report'}
+        # Check to see if the current well is stored in the database and is marked as completed
+        api_status = self.__DB_Processor.check_api_status('colorado', co_doc_tables[self.__COGCC_fClass], cleanApi)
+        if api_status:
+            '''If the current well is ####### NOT ####### found in the data base, then start the cycle to collect data for this well'''
+            utils.makeFolder(outputFolder)
+            dlStatus = self.__iBrowser.Download_COGCC_Data(cleanApi[2:10], self.__COGCC_fClass, outputFolder)
+            # update the database and output report with the status of the download for the current well
+            # check to see if the current api already exists in the database. If not add it and mark as completed
+            if dlStatus:
+                # Set the download status to 0 ---> status_dict = {0 : 'completed', 1 : 'processing', 2 : 'interrupted'}
+                download_status = 0
+                self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
+            else:
+                # insert the current well / update the current well; set the download column to incomplete
+                # Set the download status to 0 ---> status_dict = {0 : 'completed', 1 : 'processing', 2 : 'interrupted'}
+                download_status = 2
+                # create a list for the interrupted wells so we can re-attempt to download later
+                self.__interuption_list.append(currentAPI)
+                self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Downloads interupted"))
+            if (api_status == 1):
+                self.__DB_Processor.insert_api('colorado', co_doc_tables[self.__COGCC_fClass], cleanApi, download_status)
+            else:
+                self.__DB_Processor.update_download_status('colorado', co_doc_tables[self.__COGCC_fClass], cleanApi, download_status)
+        else:
+            self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already completed"))
                     
     def downloadUtah_Data(self, currentAPI):
-        cleanApi = currentAPI + "0000"
-        # Check to see if the wellDir already exist, if not then create directory and download data
-        # If directory already exist, then skip this well.
+        # set the default fclass value to wfhs
+        # There isn't currently a method set up to download well logs for utah
+        self.__COGCC_fClass = "whfs"
+        cleanApi = currentAPI + '0000'
+        
+        # Create a directory for the Utah well data
+        outputFolder = self.__folder
+        # Colorado documentation tables
+        utah_doc_tables = {'whfs' :  'dl_report', 'logs' : 'well_log_report'}
+
         # If the phd_Update variable is set to False, then this is a static download. Just download the files, without referencing the database. 
         if self.__phd_Update == False:
-        # Download data for the current well
-            dlStatus = False
-            dlStatus = self.__iBrowser.Download_Utah_Data(cleanApi, self.__folder)
+            # Download data for the current well
+            dlStatus = self.__iBrowser.Download_Utah_Data(cleanApi, outputFolder)
+            self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
         else:       
-            # Figure out if the current well exists in the DB
-            dbList = self.__DB_Processor.getDBData("SELECT * FROM utah.dl_report where api =  '%s'" %(cleanApi))
-            # If well exists, update the status with the boolean results of the download
-            if not dbList:
-                    # Download data for the current well and update the database
-                    dlStatus = self.__iBrowser.Download_Utah_Data(currentAPI, self.__folder)
-                    self.updateReportDialogMessage("%s%s" % (cleanApi, " --- File Downloaded"))
-                    sql = "INSERT INTO utah.dl_report (api, download) VALUES ('%s', 'Processed')" % (cleanApi)
-                    dbUtUpdate = self.__DB_Processor.inputDBData(sql)
+            # Check to see if the current well is stored in the database and is marked as completed
+            api_status = self.__DB_Processor.check_api_status('utah', utah_doc_tables[self.__COGCC_fClass], cleanApi)
+            '''If the current well is ####### NOT ####### found in the data base, then start the cycle to collect data for this well'''
+            if api_status:
+                
+                dlStatus = self.__iBrowser.Download_Utah_Data(cleanApi, outputFolder)
+                # update the database and output report with the status of the download for the current well
+                # check to see if the current api already exists in the database. If not add it and mark as completed
+                if dlStatus:
+                    download_status = 0
+                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Files Downloaded"))
+                else:
+                    # insert the current well / update the current well; set the download column to incomplete
+                    download_status = 2
+                    # create a list for the interrupted wells so we can re-attempt to download later
+                    self.__interuption_list.append(currentAPI)
+                    self.updateReportDialogMessage("%s%s" % (currentAPI, " --- Downloads interupted"))
+                if (api_status == 1):
+                    self.__DB_Processor.insert_api('utah', utah_doc_tables[self.__COGCC_fClass], cleanApi, download_status)
+                else:
+                    self.__DB_Processor.update_download_status('utah', utah_doc_tables[self.__COGCC_fClass], cleanApi, download_status)
             else:
-                    # Other wise, update the ui message to say that the current well has already been processed and move on to the next well
-                    self.updateReportDialogMessage("%s%s" % (cleanApi, " --- already collected"))
-    
-    def makeFolder(self, outputFolder, api):
-        if not os.path.exists(outputFolder):
-            os.makedirs(outputFolder)
-        else:
-            self.updateReportDialogMessage("%s%s" % ("Process not setup to over write existing files. There is already a folder created for API: ", api))
+                self.updateReportDialogMessage("%s%s" % (currentAPI, " --- already completed"))
+                    
     
     def debugger(self, message = []):
         if self.debbug:

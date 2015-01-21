@@ -16,10 +16,11 @@ email                : jwhitley@phdwellfile.com
 # Import necessary libraries
 import mechanize
 import requests
-import sys
 import os
 import re
 from bs4 import BeautifulSoup
+import utils
+import time
 
 # PostGreSQL data processor class
 # Establishes a connection to a specified PG database so information can be queried as needed
@@ -27,12 +28,11 @@ class Phd_Browser:
         # Class initiation
         def __init__(self, test="test"):
             self.__test = test
+            self.__current_file = ''
             
         # Allows for a file to be downloaded without using the object variables
         def Download_COGCC_Data(self, seqNum, fClass, outputDir):
             dlFile = False
-            # need to extend the extDict to include other mime types, (i.e. xml, word docs...)
-            extDict = {'application/octet-stream' : '.pdf', 'application/pdf' : '.pdf'}
             # search list for logs to download
             log_list = ['mud', 'core', 'cores']
             # List variable to count the number of pages on the current COGCC web page
@@ -86,19 +86,26 @@ class Phd_Browser:
                                     soup = BeautifulSoup(html)    
                             else:
                                 pass
-                        # We need to document the current class value of the current well. This well tell us if we should download the well based on the provided perameters
+                        # We need to document the current class value of the current well. This well tell us if we should download the well based on the provided parameters
                         elif (jx-1) % 5 == 0:
                                 dlFile = False
                                 if fClass == "all":
                                     dlFile = True
+                                    if anchors[jx].get_text() == "Wells" or anchors[jx].get_text() == "Facilities" or anchors[jx].get_text() == "Operator":
+                                        self.__current_file = 'whf'
+                                    else:
+                                        self.__current_file = 'log'
                                 elif fClass == "whfs" and (anchors[jx].get_text() == "Wells" or anchors[jx].get_text() == "Facilities" or anchors[jx].get_text() == "Operator"):
                                     dlFile = True
+                                    self.__current_file = 'whf'
                                 # This method is really designed for the Mud log and core search search, not really logs specifically. Need to reinsert the following comment into the fClass == conditional statement
                                 #"""(anchors[jx].get_text() == "Wells" or anchors[jx].get_text() == "Well Logs" or anchors[jx].get_text() == "Projects") and"""
-                                elif fClass == "logs" and self.find_substring(anchors[jx+2].get_text(), log_list): 
+                                elif fClass == "logs" and utils.find_substring(anchors[jx+2].get_text(), log_list): 
                                     dlFile = True
+                                    self.__current_file = 'log'
                                 else:
                                     dlFile = False
+                                    self.__current_file = ''
                         
                         # We want to download from every 4th link. The 4th link contains the name of the file. So download the file if the current (index-3) % 5 == 0
                         elif (jx-3) % 5 == 0 and dlFile == True:
@@ -108,20 +115,28 @@ class Phd_Browser:
                                 fileCount = fileCount + 1
                                 # Remove shit characters
                                 fileName = re.sub('[\\\/:*?\'\"<>\|\\r\\n]','',fileName)
+                                fileName = re.sub(' ','_',fileName)
                                 # Set the url using the current anchor element href
                                 url = "%s" % ("http://ogccweblink.state.co.us/" + anchors[jx].get("href"))
                                 # Get it!!!!
                                 r = requests.get(url)
-                                mime = r.headers['content-type']
                                 # Set the output file path, need to extend the extDict to include other mime types, (i.e. xml, word docs...)
                                 # Use try block because we might encounter unknown media type
-                                try:
-                                    filePath = os.path.join(outputDir, "%s%s" % (fileName, extDict[mime]))
-                                except:
-                                    filePath = os.path.join(outputDir, fileName)
+                                filePath = os.path.join(outputDir, fileName)
                                 if r.status_code == 200:
                                     with open(filePath, "wb") as image:
                                         image.write(r.content)
+                                # retrieve the file extension from the downloaded file
+                                ext = utils.get_ext(filePath)
+                                # set the extension on the current download
+                                try:
+                                    print filePath
+                                    if ext == 'PDF' or self.__current_file == 'log':
+                                        utils.set_file_ext(filePath, ext)
+                                    else:
+                                        utils.tiff2pdf(filePath)
+                                except:
+                                    pass
                         else:
                             pass
                 # Clear out all variables
@@ -146,7 +161,6 @@ class Phd_Browser:
                 url = None
                 r = None
                 return False
-                sys.exit(1)
         
         def Download_Utah_Data(self, seqNum, outputDir):
             # Download data
@@ -163,19 +177,21 @@ class Phd_Browser:
                 # Set the output file path, need to extend the extDict to include other mime types, (i.e. xml, word docs...)
                 # Use try block because we might encounter unknown media type
                 try:
-                    filePath = os.path.join(outputDir, "%s%s%s" % (seqNum, '0000', extDict[mime]))
+                    filePath = os.path.join(outputDir, "%s%s" % (seqNum, extDict[mime]))
                 except:
                     filePath = os.path.join(outputDir, seqNum)
                 if r.status_code == 200:
                     with open(filePath, "wb") as image:
                         image.write(r.content)
+                    s = True
                 else:
+                    s = False
                 # Clear out all variables
-                    fileName = None
-                    filePath = None
-                    url = None
-                    r = None
-                    return True
+                fileName = None
+                filePath = None
+                url = None
+                r = None
+                return s
             
             except requests.ConnectionError, e:
                 # Clear out all variables
@@ -184,22 +200,6 @@ class Phd_Browser:
                 url = None
                 r = None
                 return False
-                sys.exit(1)
-            
-            
-        # utility methods
-        def find_substring(self, key_words, word_list):
-            ''' search for a key word within the provided search string
-            Handles case sensitivity by converting all words to a lower case representation
-            method returns a boolean true false value'''
-            # split search string into it's indavidual words
-            key_word_list = key_words.split()
-            for kw in key_word_list:
-                for word in word_list:
-                    if kw.lower() == word.lower():
-                        return True
-                return False
-            
             
             
             
