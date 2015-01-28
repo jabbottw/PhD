@@ -1,0 +1,155 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Generator" content="Microsoft Word 97">
+   <meta name="Version" content="8.0.4308">
+   <meta name="Date" content="7/8/97">
+   <meta name="Template" content="C:\Program Files\Microsoft Office\Office\HTML.DOT">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (Win98; U) [Netscape]">
+   <title>jpeg2pdf – Convert JPEG Files to PDF Files</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#800080">
+
+<center>
+<h1>
+jpeg2pdf – Convert JPEG Files to PDF</h1></center>
+
+<center>Version: 2.2
+<p>Part of <a href="summary.html">DaVince Tools</a>
+<br>Web Site: <a href="http://www.davince.com/">www.davince.com</a>
+<p>Last Modified: July 22, 2003</center>
+
+<p><a href="#syntax">Command Syntax</a>
+<p><a href="#description">Description</a>
+<p><a href="#newfeatures">New Features / Changes</a>
+<p><a href="#information">Additional Information</a>
+<p><a href="#about">About DaVince Tools</a>
+<p>
+<hr>
+<h2>
+<a NAME="syntax"></a>Command Syntax</h2>
+<a NAME="description"></a>Refer to the <a href="convert.html">"DaVince
+Tools" Converters</a> page for a description of the command line syntax
+for all converters.
+<h2>
+Description</h2>
+"jpeg2pdf" is a command line program that converts JPEG files to PDF (Portable
+Document Format) files (for a Windows interface to this program, see <a href="wdavince.html">wdavince</a>).
+JPEG is a file standard used primarily for photographic images. The program
+takes the raw image data from the JPEG file "as is" and puts it in a PDF
+wrapper. This analogous to removing a letter from a letter size envelope
+and placing it in a business size envelope. The original image data is
+unaltered, so no data compression of the image is done (although the page
+description can be compressed using the "compression" option in the jpeg2pdf.ini
+file). Since the image is transferred "as is" from the JPEG file to the
+PDF file, this results in a fast conversion. The key features of this program
+are:
+<ul>
+<li>
+JPEG file formats JFIF and ITU T.81 supported</li>
+
+<li>
+Single and multi-page file support</li>
+
+<li>
+Bookmark support</li>
+
+<li>
+Convert many JPEG files to one PDF (many to one), create a PDF file for
+each specified JPEG file (one to one), or create a PDF file for each JPEG
+subdirectory specified (many to few)</li>
+
+<li>
+RGB, Grayscale and CMYK JPEG files supported</li>
+
+<li>
+Quick conversion of data by utilizing existing compressed image data</li>
+
+<li>
+Individual filenames with wildcard support and/or an entire directory may
+be specified for conversion</li>
+
+<li>
+Specify files or directories to convert either via the command line or
+a command file</li>
+
+<li>
+Large file support (1,000+ pages)</li>
+
+<li>
+Creates a version 1.2 PDF file with a unique file ID in trailer</li>
+</ul>
+&nbsp;The height, width and resolution information embedded in the JPEG
+file are used to determine the physical page size. For example, an image
+2,544 pixels wide and 3,287 pixels long and scanned at 300 DPI results
+in a PDF page size of 2,544/300 by 3,287/300, or 8.48 inches wide by 10.96
+inches long. The resulting page size may not match a standard paper size,
+however, this is not a problem for viewers like Adobe Acrobat. The advantage
+to this method is that a multiple page conversion can contain images scanned
+at different sizes. This allows, for example, a converted PDF file to contain
+both U.S. letter and legal size pages, as well as differing European sizes
+(A1, A2, etc.) or even a combination of the two.
+<p>The screen output can be redirected to a file adding the DOS syntax
+">filename" to the end of the command line. This can be used to redirect
+output to a log file. The program returns an error code of 1 when a fatal
+error occurs, used in batch programs to test the success of the program.
+<p>The initialization file and the use of profiles is described in the
+<a href="convert.html">"DaVince
+Tools" Converters</a> page.
+<h2>
+Common Profile Settings</h2>
+Refer to the <a href="convert.html">"DaVince Tools" Converters</a> page
+for a description of the common profile settings.
+<p><b>Converter Specific Settings</b>
+<p>This tables describes jpeg2pdf.ini settings that are unique to this
+converter:
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="624" >
+<tr>
+<td VALIGN=TOP WIDTH="38%"><b>Option</b></td>
+
+<td VALIGN=TOP WIDTH="23%"><b>Data Type</b></td>
+
+<td VALIGN=TOP WIDTH="38%"><b>Description</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">DefaultDPI</td>
+
+<td VALIGN=TOP WIDTH="23%">Number (in dpi)</td>
+
+<td VALIGN=TOP WIDTH="38%">Default resolution (in dots per inch) to use
+if the resolution is not specified in the JPEG file. Default value is 150.</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<h2>
+<a NAME="newfeatures"></a>New Features / Changes:</h2>
+A list of new features and changes, along with a version history, can be
+found in the <a href="release.html#version">release notes.</a>
+<h2>
+<a NAME="information"></a>Additional Information:</h2>
+Any DaVince Tool product that creates a PDF must create an intermediate
+file prior to writing the PDF file. The filename of this intermediate file
+begins with "tmps" and appears in the directory pointed to by the environment
+variable "TMP". If this environment does not exist, then the temporary
+file is written in the current directory. The intermediate file exists
+only during the execution of the program.
+<h2>
+<a NAME="about"></a></h2>
+
+<h2>
+About DaVince Tools:</h2>
+Visit the <b>DaVince Tools</b> web site at <a href="http://www.davince.com/">http://www.davince.com</a>
+for the latest version of this software and the latest documentation. <b>DaVince
+Tools</b> is shareware and software registration is urged if you find these
+programs useful. You can register the software on-line at <a href="http://www.davince.com/">http://www.davince.com</a>.
+<p><b>DaVince Tools</b> was written in C++ using the <b>DaVince Class Library</b>,
+written by the same author as this program. The <b>DaVince Class Library</b>
+is a C++ library for developing PDF and TIFF applications. Contact the
+author at <a href="mailto:info@davince.com">info@davince.com</a> for more
+information on the availability of the class library.
+</body>
+</html>

@@ -1,0 +1,941 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Generator" content="Microsoft Word 97">
+   <meta name="Template" content="C:\Program Files\Microsoft Office\Office\HTML.DOT">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (Win98; U) [Netscape]">
+   <title>txt2pdf - Convert Text Files to PDF</title>
+</head>
+<body link="#0000FF" vlink="#800080">
+
+<center>
+<h1>
+txt2pdf – Convert Text Files to PDF</h1></center>
+
+<center>Version: 2.2
+<p>Part of <a href="summary.html">DaVince Tools</a>
+<br>Web Site: <a href="http://www.davince.com/">www.davince.com</a>
+<p>Last Modified: July 22, 2003</center>
+
+<p><a href="#syntax">Command Syntax</a>
+<p><a href="#description">Description</a>
+<p><a href="#newfeatures">New Features / Changes</a>
+<p><a href="#information">Additional Information</a>
+<p><a href="#about">About DaVince Tools</a>
+<p>
+<hr>
+<h2>
+<a NAME="syntax"></a>Command Syntax:</h2>
+<a NAME="description"></a>Refer to the <a href="convert.html">"DaVince
+Tools" Converters</a> page for a description of the command line syntax
+for all converters.
+<h2>
+Description:</h2>
+"txt2pdf" is a command line program that converts ASCII text files to PDF
+(Portable Document Format) files (for a Windows interface to this program,
+see <a href="wdavince.html">wdavince</a>). The key features of this program
+are:
+<ul>
+<li>
+Choice of any of the base 14 fonts</li>
+
+<li>
+Support for 3 standard font encoding types for use with international characters</li>
+
+<li>
+Text re-flow support with left or full justification</li>
+
+<li>
+Support for legacy carriage control used in FORTRAN and COBOL generated
+reports</li>
+
+<li>
+Automatic detection of DOS, Unix and Mac text files</li>
+
+<li>
+PDF file compression support</li>
+
+<li>
+Multiple column support</li>
+
+<li>
+Article thread option</li>
+
+<li>
+Optional "green bar" background</li>
+
+<li>
+Automatic bookmark creation option</li>
+
+<li>
+Customizable headers and footers</li>
+
+<li>
+Header, footer and column line option</li>
+
+<li>
+Convert many text files to one PDF, a directory of text files to one PDF,
+or create a PDF file for each text file</li>
+
+<li>
+Individual filenames with wildcard support and/or an entire directory may
+be specified for conversion</li>
+
+<li>
+Specify files or directories to convert either via the command line or
+a command file</li>
+
+<li>
+Large file support (1,000+ pages)</li>
+
+<li>
+Creates a version 1.2 PDF file with a unique file ID in trailer</li>
+</ul>
+The application reads text files independent of the end of line character
+sequence. This allows DOS, Unix and Mac text files to be read by the application.
+The screen output can be redirected to a file adding the DOS syntax ">filename"
+to the end of the command line. This can be used to redirect output to
+a log file. The program returns an error code of 1 when a fatal error occurs,
+used in batch programs to test the success of the program.
+<p>Special characters provide additional functionality during conversion.
+They are listed below:
+<br>&nbsp;
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="590" >
+<tr>
+<td VALIGN=TOP WIDTH="50%"><b>Character</b></td>
+
+<td VALIGN=TOP WIDTH="50%"><b>Behavior in Application</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">Horizontal Tab (HT)</td>
+
+<td VALIGN=TOP WIDTH="50%">Replace tab character with 1 or more spaces
+(see "TabSpace" parameter)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">Form Feed (FF)</td>
+
+<td VALIGN=TOP WIDTH="50%">Skip to next page</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">Vertical Tab (VT)</td>
+
+<td VALIGN=TOP WIDTH="50%">Skip to next column. If at the last column in
+the page, or the page contains only 1 column, skip to next page</td>
+</tr>
+</table>
+
+<p>Other characters in column position 1 provide additional carriage control
+features when "legacy" mode is enabled (see below for additional information).
+<p>The initialization file and the use of profiles is described in the
+<a href="convert.html">"DaVince
+Tools" Converters</a> page. In addition to the default profile, the following
+sample profiles are defined in the txt2pdf.ini file that ships with the
+program:
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="638" >
+<tr>
+<td VALIGN=TOP WIDTH="50%"><b>Profile Name</b></td>
+
+<td VALIGN=TOP WIDTH="50%"><b>Description</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">fixed-80x60</td>
+
+<td VALIGN=TOP WIDTH="50%">Fixed font, 80 characters per line, 60 lines
+per page, portrait mode, line wrap at margin. Useful for printing standard
+text files in a fixed font that assumes 80 characters per line.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">fixedbar-80x60</td>
+
+<td VALIGN=TOP WIDTH="50%">Same as "fixed-80x60" with a green bar background.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">legacy-80x60</td>
+
+<td VALIGN=TOP WIDTH="50%">Fixed font, 80 characters per line, 60 lines
+per page, portrait mode, line wrap at margin. Same as "fixed-80x60", except
+it uses the legacy carriage control characters in column 1 (i.e "1" is
+form feed, "0" is double space).</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">legacybar-80x60</td>
+
+<td VALIGN=TOP WIDTH="50%">&nbsp;Same as "legacy-80x60" with a green bar
+background.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">fixed-132x60</td>
+
+<td VALIGN=TOP WIDTH="50%">Fixed font, 132 characters per line, 60 lines
+per page, landscape mode, line wrap at margin. Useful for printing standard
+text files in a fixed font that assumes 132 characters per line.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">fixedbar-132x60</td>
+
+<td VALIGN=TOP WIDTH="50%">&nbsp;Same as "Fixed-132x60" with a green bar
+background.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">legacy-132x60</td>
+
+<td VALIGN=TOP WIDTH="50%">Fixed font, 132 characters per line, 60 lines
+per page, landscape mode, line wrap at margin. Same as "Fixed-132x60",
+except it uses the legacy carriage control characters in column 1 (i.e
+"1" is form feed, "0" is double space).</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">legacybar-132x60</td>
+
+<td VALIGN=TOP WIDTH="50%">Same as "Legacy-132x60" with a green bar background</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">book-1col</td>
+
+<td VALIGN=TOP WIDTH="50%">Proportional font, 12 point font, word wrap
+with text reflow, 1 column, page numbers</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">book-2col</td>
+
+<td VALIGN=TOP WIDTH="50%">Proportional font, 12 point font, word wrap
+with text reflow, 2 columns, page numbers</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<h3>
+Common Profile Settings</h3>
+Refer to the <a href="convert.html">"DaVince Tools" Converters</a> page
+for a description of the common profile settings.
+<h3>
+Converter Specific Settings</h3>
+These tables describe txt2pdf.ini settings that are unique to this converter.
+They are divided into the following categories:
+<p><a href="#margin">Margin and Layout INI Options</a>
+<br><a href="#font">Font INI Options</a>
+<br><a href="#headerfooter">Header and Footer INI Options</a>
+<br><a href="#misc">Misc. INI Options</a>
+<br>&nbsp;
+<br>&nbsp;
+<h3>
+<a NAME="margin"></a>Margin and Layout INI Options</h3>
+
+<table BORDER CELLPADDING=7 WIDTH="624" >
+<tr>
+<td VALIGN=TOP WIDTH="38%"><b>Option</b></td>
+
+<td VALIGN=TOP WIDTH="23%"><b>Data Type</b></td>
+
+<td VALIGN=TOP WIDTH="38%"><b>Description</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Leftmargin</td>
+
+<td VALIGN=TOP WIDTH="23%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="38%">The left margin. The default is 36 points (.5
+inches)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Rightmargin</td>
+
+<td VALIGN=TOP WIDTH="23%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="38%">The right margin. The default is 36 points (.5
+inches)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Topmargin</td>
+
+<td VALIGN=TOP WIDTH="23%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="38%">The top margin. The default is 36 points (.5
+inches)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Bottommargin</td>
+
+<td VALIGN=TOP WIDTH="23%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="38%">The bottom margin. The default is 36 points
+(.5 inches)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Columnmargin</td>
+
+<td VALIGN=TOP WIDTH="23%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="38%">The margin between columns if number of columns
+is greater than 1. The default is 14.4 points (.2 inches)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Columns</td>
+
+<td VALIGN=TOP WIDTH="23%">Number</td>
+
+<td VALIGN=TOP WIDTH="38%">Number of columns per page (default is 1)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Paper</td>
+
+<td VALIGN=TOP WIDTH="23%">Letter | legal | executive | ledger | a0 | a1
+| a2 | a3 | a4 | a5 | a6 | a7 | a8 | a9 | a10 | custom w h</td>
+
+<td VALIGN=TOP WIDTH="38%">The paper size. The default is letter. For a
+custom paper size, w and h are the width and height of the custom paper
+size, respectively.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Orientation</td>
+
+<td VALIGN=TOP WIDTH="23%">Portrait | landscape</td>
+
+<td VALIGN=TOP WIDTH="38%">The paper orientation. The default is portrait.</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<h3>
+<a NAME="font"></a>Font INI Options</h3>
+
+<table BORDER CELLPADDING=7 WIDTH="624" >
+<tr>
+<td VALIGN=TOP WIDTH="38%"><b>Option</b></td>
+
+<td VALIGN=TOP WIDTH="23%"><b>Data Type</b></td>
+
+<td VALIGN=TOP WIDTH="38%"><b>Description</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Leading</td>
+
+<td VALIGN=TOP WIDTH="23%">Number + "" | "x" | "lpi"</td>
+
+<td VALIGN=TOP WIDTH="38%">Leading is the vertical spacing between lines.
+It can be specified 3 ways. A number by itself specifies the leading as
+a point size. Specifying a leading value less than your font size can result
+in overlapping text. A number with "x" specifies the factor to apply against
+the font size to determine the leading value. For example, "1x" refers
+to a leading value equal to the font size value. A value of "2x" refers
+to a leading value equal to twice the font size value (double space). A
+number with "lpi" specifies the leading as a "lines per inch" value. Default
+is 1x.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Font</td>
+
+<td VALIGN=TOP WIDTH="23%">Fonts: Courier | Courier-Bold | Courier-BoldOblique
+| Courier-Oblique | Helvetica | Helvetica-Bold | Helvetica-BoldOblique
+| Helvetica-Oblique | Times-Roman | Times-Bold | Times-Italic | Times-BoldItalic
+| ZapfDingbats
+<p>Encodings: Default | WinAnsiEncoding | MacRomanEncoding | PdfDocEncoding</td>
+
+<td VALIGN=TOP WIDTH="38%">The name of the font and optional encoding.
+The font name can be the name of any of the 14 base fonts for Adobe reader.
+The font name is case sensitive (default font is Courier).
+<p>An optional encoding can be specified. The encoding name is also case
+sensitive (default encoding is Default).</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Fontsize</td>
+
+<td VALIGN=TOP WIDTH="23%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="38%">The size of the font, in points (there are 72
+points in 1 inch). The default value is 12 points.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Wrapmode</td>
+
+<td VALIGN=TOP WIDTH="23%">truncate | margin | legacy | word</td>
+
+<td VALIGN=TOP WIDTH="38%">Method of wrapping lines (lines longer than
+the column width). Choices are:&nbsp;
+<p>Truncate – do not show anything past margin&nbsp;
+<p>Margin (default) – wrap line at margin to next line
+<p>Legacy - use column 1 for carriage control in the following manner (used
+in COBOL and FORTRAN formatted output):
+<ul>
+<li>
+'1' - form feed&nbsp;</li>
+
+<li>
+blank - single space&nbsp;</li>
+
+<li>
+'0' - double space&nbsp;</li>
+
+<li>
+'-' - triple space</li>
+</ul>
+Word – wrap line at word to next line</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Justification</td>
+
+<td VALIGN=TOP WIDTH="23%">Left | full</td>
+
+<td VALIGN=TOP WIDTH="38%">&nbsp;When wrap mode is set to "word" and justification
+is set to "full", perform full justification, which removes the ragged
+text edge on the right margin (default is left).&nbsp;</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<h3>
+<a NAME="headerfooter"></a>Header and Footer INI Options</h3>
+(more information is also in the "<a href="#headerfooteroptions">Headers
+and Footers</a>" section below)
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="624" >
+<tr>
+<td VALIGN=TOP WIDTH="38%"><b>Option</b></td>
+
+<td VALIGN=TOP WIDTH="23%"><b>Data Type</b></td>
+
+<td VALIGN=TOP WIDTH="38%"><b>Description</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Header</td>
+
+<td VALIGN=TOP WIDTH="23%">Bool</td>
+
+<td VALIGN=TOP WIDTH="38%">Display header on each page. Default is false.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Headerfont</td>
+
+<td VALIGN=TOP WIDTH="23%">Fonts: Courier | Courier-Bold | Courier-BoldOblique
+| Courier-Oblique | Helvetica | Helvetica-Bold | Helvetica-BoldOblique
+| Helvetica-Oblique | Times-Roman | Times-Bold | Times-Italic | Times-BoldItalic
+| ZapfDingbats
+<p>Encodings: Default | WinAnsiEncoding | MacRomanEncoding | PdfDocEncoding</td>
+
+<td VALIGN=TOP WIDTH="38%">The name of the font used in the header. The
+font name can be the name of any of the 14 base fonts for Adobe reader.
+The font name is case sensitive (default font is Courier).
+<p>An optional encoding can be specified. The encoding name is also case
+sensitive (default encoding is Default).</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Headerfontsize</td>
+
+<td VALIGN=TOP WIDTH="23%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="38%">The size of the font used in the header, in
+points (there are 72 points in 1 inch). The default is 12 points.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Headerstring</td>
+
+<td VALIGN=TOP WIDTH="23%">String</td>
+
+<td VALIGN=TOP WIDTH="38%">Customized header string (see below for syntax).
+Default is "|- &amp;p -"</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Footer</td>
+
+<td VALIGN=TOP WIDTH="23%">Bool</td>
+
+<td VALIGN=TOP WIDTH="38%">Display footer on each page. Default is false.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Footerfont</td>
+
+<td VALIGN=TOP WIDTH="23%">Fonts: Courier | Courier-Bold | Courier-BoldOblique
+| Courier-Oblique | Helvetica | Helvetica-Bold | Helvetica-BoldOblique
+| Helvetica-Oblique | Times-Roman | Times-Bold | Times-Italic | Times-BoldItalic
+| ZapfDingbats
+<p>Encodings: Default | WinAnsiEncoding | MacRomanEncoding | PdfDocEncoding</td>
+
+<td VALIGN=TOP WIDTH="38%">The name of the font used in the footer. The
+font name can be the name of any of the 14 base fonts for Adobe reader.
+The font name is case sensitive (default font is Courier).
+<p>An optional encoding can be specified. The encoding name is also case
+sensitive (default encoding is Default).</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Footerfontsize</td>
+
+<td VALIGN=TOP WIDTH="23%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="38%">The size of the font used in the footer, in
+points (there are 72 points in 1 inch). The default is 12 points.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Headerlinewidth</td>
+
+<td VALIGN=TOP WIDTH="23%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="38%">Draws a horizontal line of the specified width
+between the header and the top of the text on a page. This value should
+be set to less than the value of the Fontsize tag. Set to zero when no
+line is desired (default value is zero).</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Footerlinewidth</td>
+
+<td VALIGN=TOP WIDTH="23%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="38%">Draws a horizontal line of the specified width
+between the footer and the bottom of the text on a page. This value should
+be set to less than the value of the Fontsize tag. Set to zero when no
+line is desired (default value is zero).</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Columnlinewidth</td>
+
+<td VALIGN=TOP WIDTH="23%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="38%">If Columns is set to 2 or more, this option
+draws a vertical line at the specified width between the columns. This
+value should be set to less than the value of the Columnmargin tag. Set
+to zero when no line is desired (default value is zero).</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Footerstring</td>
+
+<td VALIGN=TOP WIDTH="23%">String</td>
+
+<td VALIGN=TOP WIDTH="38%">Customized footer string (see below for syntax).
+Default is "|- &amp;p -"</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<h3>
+<a NAME="misc"></a>Misc. INI Settings</h3>
+
+<table BORDER CELLPADDING=7 >
+<tr>
+<td VALIGN=TOP WIDTH="234"><b>OptionDescription</b></td>
+
+<td VALIGN=TOP COLSPAN="2" WIDTH="270">&nbsp;</td>
+
+<td VALIGN=CENTER>&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="234">PageTrim</td>
+
+<td VALIGN=TOP WIDTH="141">Front | back | both | none</td>
+
+<td VALIGN=TOP COLSPAN="2" WIDTH="248">Remove blank pages from either the
+front or back of the resulting PDF file, or both. Blank pages result when
+extra form feed characters appear at the beginning or end of the text stream.
+The default is none.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="234">Articles</td>
+
+<td VALIGN=TOP WIDTH="141">Bool</td>
+
+<td VALIGN=TOP COLSPAN="2" WIDTH="248">Create article threads for document.
+When combining multiple text files into 1 PDF file, an article thread is
+created for each file. The default is false.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="234"><a href="#barwizardoptions">BarWizard</a></td>
+
+<td VALIGN=TOP WIDTH="141">Bool</td>
+
+<td VALIGN=TOP COLSPAN="2" WIDTH="248">When true, create "green bars" on
+the page to give it a legacy report look. The default is false.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="234"><a href="#barwizardoptions">BarWizardOptions</a></td>
+
+<td VALIGN=TOP WIDTH="141">Multiple options</td>
+
+<td VALIGN=TOP COLSPAN="2" WIDTH="248">Define various options for the bar
+wizard</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="234">ParagraphWizard</td>
+
+<td VALIGN=TOP WIDTH="141">Bool</td>
+
+<td VALIGN=TOP COLSPAN="2" WIDTH="248">When used with "wrapmode=word",
+this wizard removes linefeeds at the end of a line if the next lines does
+not contain a space or blank line. The effect of this is that the resulting
+PDF file will have a better text flow at the margin. The default is false.</td>
+</tr>
+
+<tr>
+<td>ResetPageNumber</td>
+
+<td>Bool</td>
+
+<td COLSPAN="2" WIDTH="248">If combining multiple text files into a single
+PDF file, reset the page number to "1" between each file. This is useful
+if you are printing the page number in the header or footer. The default
+is false.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="234">TabSpace</td>
+
+<td VALIGN=TOP WIDTH="141">Integer</td>
+
+<td VALIGN=TOP COLSPAN="2" WIDTH="248">Convert tabs to this specified number
+of spaces.&nbsp; The default is "8".</td>
+</tr>
+</table>
+
+<p>All margin, leading, line and font size parameters are specified in
+"points". A point is a unit of measurement equal to 1/72 of an inch. A
+1/2 inch margin would be specified as 36 points. A 12 point font with 1x
+leading specified would print at 72/12 or 6 lines per inch.
+<h3>
+<a NAME="headerfooteroptions"></a>Headers and Footers</h3>
+Headers and footers are customizable. The single line of text can be left,
+centered and right justified using the vertical pipe character "|" as a
+tab character. Text is initially left justified. After the first "|" character,
+the following text is centered. Another "|" character will right justify
+text following the second tab. Variables can be specified to be a part
+of the text in the header or footer. A variable starts with the ampersand
+character "&amp;", followed by a single character. Variables are case sensitive.
+The following variables are available for use in a header or footer:
+<br>&nbsp;
+<table BORDER=0 CELLSPACING=0 CELLPADDING=7 WIDTH="288" >
+<tr>
+<td VALIGN=TOP WIDTH="25%">&amp;&amp;</td>
+
+<td VALIGN=TOP WIDTH="75%">Literal ampersand character "&amp;"</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="25%">&amp;a</td>
+
+<td VALIGN=TOP WIDTH="75%">Author name as specified on the command line</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="25%">&amp;A</td>
+
+<td VALIGN=TOP WIDTH="75%">Alias of file being processed (via command file),
+or name of file if no alias specified</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="25%">&amp;d</td>
+
+<td VALIGN=TOP WIDTH="75%">Date of file</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="25%">&amp;D</td>
+
+<td VALIGN=TOP WIDTH="75%">Current system date</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="25%">&amp;f</td>
+
+<td VALIGN=TOP WIDTH="75%">Name of file being processed</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="25%">&amp;p</td>
+
+<td VALIGN=TOP WIDTH="75%">Current page number</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="25%">&amp;s</td>
+
+<td VALIGN=TOP WIDTH="75%">Subject name as specified on the command line</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="25%">&amp;t</td>
+
+<td VALIGN=TOP WIDTH="75%">Time of file</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="25%">&amp;T</td>
+
+<td VALIGN=TOP WIDTH="75%">Current system time</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="25%">&amp;w</td>
+
+<td VALIGN=TOP WIDTH="75%">Title or file name if title not present on command
+line</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<p>The default header and footer string is "|- &amp;p -". This places a
+page number in the center of the page.
+<h3>
+Copying Text to the Clipboard</h3>
+To copy text to the clipboard from a multi-column PDF file, use the text
+selection tool and press the CTRL key while dragging a rectangle around
+the area. You can only copy 1 column of text at a time using this method.
+<h3>
+Determining Characters per Line and Lines Per Page</h3>
+There is no direct way of specifying the number of characters per line
+when using a fixed font. The number of characters per line is dependent
+on the width of the page, the number of columns, the margins and the size
+of the font. The following formula can be used to set the text font point
+size when a specific number of characters per line is required:
+<p>(text font size) = ((page width)- (left margin) - (right margin) - ((#
+of columns) -1) * (column margin)) / (chars per line) / 0.6
+<p>(text font size, page width, and margins must be specified in points)
+<br>&nbsp;
+<br>&nbsp;
+<p>For example:
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="438" >
+<tr>
+<td VALIGN=TOP WIDTH="40%">Page Width</td>
+
+<td VALIGN=TOP WIDTH="60%">612 points (8.5 inches)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="40%">Left Margin</td>
+
+<td VALIGN=TOP WIDTH="60%">72 points (1 inch)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="40%">Right Margin</td>
+
+<td VALIGN=TOP WIDTH="60%">72 points (1 inch)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="40%"># of chars per line</td>
+
+<td VALIGN=TOP WIDTH="60%">80</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="40%"># of columns</td>
+
+<td VALIGN=TOP WIDTH="60%">1</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<p>(text font size) = ((612 - 72 - 72 - 0)/ 80 / .6 = 9.75
+<p>Therefore, a font size of 9.75 points is required to print 80 characters
+per line.
+<p>Similarly, the number of lines per page cannot be specified directly.
+However, a value for leading can be calculated to get the desired lines
+per page. The following formula can be used to determine the leading based
+on a desired number of lines per page (note that for calculation purposes,
+the header and footer lines each count as one line):
+<br>&nbsp;
+<br>&nbsp;
+<p>(total lines per page) = (lines per page)
+<p>if (header line width) > 0 then (total lines per page) = (total lines
+per page) + 1
+<p>if (footer line width) > 0 then (total lines per page) = (total lines
+per page) + 1
+<p>(absolute leading) = ((page height)- (top margin) - (bottom margin)
+- (header height) - (footer height)) / (total lines per page)
+<p>(font size, page height, and margins must be specified in points)
+<p>Note that overlapping text can occur if the leading value is less the
+font size. The header and footer heights are zero if they are disabled,
+otherwise, they are calculated as follows:
+<p>(header height) = (header font size)
+<p>(footer height) = (footer font size)
+<p>For example:
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="438" >
+<tr>
+<td VALIGN=TOP WIDTH="40%">Page Height</td>
+
+<td VALIGN=TOP WIDTH="60%">792 points (11.0 inches)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="40%">Top Margin</td>
+
+<td VALIGN=TOP WIDTH="60%">36 points (0.5 inch)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="40%">Bottom Margin</td>
+
+<td VALIGN=TOP WIDTH="60%">36 points (0.5 inch)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="40%">Desired # of lines per page</td>
+
+<td VALIGN=TOP WIDTH="60%">60</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="40%">Text Font Size</td>
+
+<td VALIGN=TOP WIDTH="60%">12</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="40%">Header Font Size</td>
+
+<td VALIGN=TOP WIDTH="60%">14</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="40%">Header Line Width</td>
+
+<td VALIGN=TOP WIDTH="60%">2</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="40%">Footer Font Size</td>
+
+<td VALIGN=TOP WIDTH="60%">disabled</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="40%">Footer Line Width</td>
+
+<td VALIGN=TOP WIDTH="60%">0</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<p>First calculate the header height:
+<p>(header height) = (14)
+<p>(total lines per page) = 60 + 1 = 61
+<br>&nbsp;
+<br>&nbsp;
+<p>Footer height is zero, now calculate leading value:
+<p>(absolute leading) = ((792)- (36) - (36) - (14) - (0)) / (61) = 11.574
+points
+<h3>
+<a NAME="barwizardoptions"></a>Bar Wizard Options</h3>
+When the bar wizard is enabled, it creates a "green bar" background to
+the page. This "green bar" background is used to help ease the horizontal
+reading of a legacy report. This eliminates the need to purchase green
+bar paper since the green bars are a part of the PDF file.
+<p>The option "BarWizard" is used to enable or disable the green bar background.
+The option "BarWizardOptions" allows one to customize the layout of the
+green bar background. The following parameters can be used with this option:
+<br>&nbsp;
+<table BORDER=0 CELLSPACING=0 CELLPADDING=7 WIDTH="638" >
+<tr>
+<td VALIGN=TOP WIDTH="50%">BarHeight</td>
+
+<td VALIGN=TOP WIDTH="50%">The height of the green bar, in points. The
+default is 36 points (.5 inches)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">Color</td>
+
+<td VALIGN=TOP WIDTH="50%">The color of the green bar (it does not have
+to be green). Must be set to either "green", "blue" or "gray". The default
+is "green"</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">LineNumbers</td>
+
+<td VALIGN=TOP WIDTH="50%">Boolean value. If set to true, display line
+numbers on the left and right sides of the bars. The default is true</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">LineSkip</td>
+
+<td VALIGN=TOP WIDTH="50%">The number of lines to skip before printing
+the first green bar at the top of the report. This allows for white space
+at the top of a report to allow for a heading. The default value is "0"
+(no line skip)</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<p>These parameters are listed in a comma separated list in the format
+of
+<p><tt>param:value</tt>
+<p>The following statement specifies the default values for all parameters
+<p><tt>BarWizardOptions=barheight:36,color:green,lineskip:0,linenumbers:true</tt>
+<p>The wizard utilizes the page size and its margins in determining the
+geometry of the bars itself.
+<br>&nbsp;
+<br>&nbsp;
+<h2>
+<a NAME="newfeatures"></a>New Features / Changes</h2>
+A list of new features and changes, along with a version history, can be
+found in the <a href="release.html#version">release notes.</a>
+<h2>
+<a NAME="information"></a>Additional Information:</h2>
+Any tool that creates a PDF must create an intermediate file prior to writing
+the PDF file. The filename of this intermediate file begins with "tmps"
+and appears in the directory pointed to by the environment variable "TMP".
+If this environment does not exist, then the temporary file is written
+in the current directory. The intermediate file exists only during the
+execution of the program.
+<br>&nbsp;
+<br>&nbsp;
+<h2>
+<a NAME="about"></a>About DaVince Tools:</h2>
+Visit the <b>DaVince Tools</b> web site at <a href="http://www.davince.com/">http://www.davince.com</a>
+for the latest version of this software and the latest documentation. <b>DaVince
+Tools</b> is shareware and software registration is urged if you find these
+programs useful. You can register the software on-line at <a href="http://www.davince.com/">http://www.davince.com</a>.
+<p><b>DaVince Tools</b> was written in C++ using the <b>DaVince Class Library</b>,
+written by the same author as this program. The <b>DaVince Class Library</b>
+is a C++ library for developing PDF and TIFF applications. Contact the
+author at <a href="mailto:info@davince.com">info@davince.com</a> for more
+information on the availability of the class library.
+</body>
+</html>

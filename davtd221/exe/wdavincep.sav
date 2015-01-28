@@ -1,0 +1,63 @@
+;
+; DaVince Tools
+; initialization file for wdavince, a Windows interface for DaVince Tools
+; see www.davince.com for more information about DaVince Tools
+;
+; **** WARNING ****
+; The wdavince.ini file is overwritten by either wdavince.sav or
+; wdavincep.sav.  Please modify one of the these files instead of
+; wdavince.ini, or instead disable the goplus or gostd tool menu items.
+
+[converter]
+txt2pdf=exe:txt2pdf.exe,ini:txt2pdf.ini,defaultpdf:text.pdf,files:"Text files (*.txt,*.bat,*.ini)|*.txt;*.bat;*.ini",title:"Text to PDF"
+jpeg2pdf=exe:jpeg2pdf.exe,ini:jpeg2pdf.ini,defaultpdf:jpeg.pdf,files:"JPEG files (*.jpg,*.jpeg)|*.jpg;*.jpeg",title:"JPEG to PDF"
+tiff2pdf=exe:tiff2pdf.exe,ini:tiff2pdf.ini,defaultpdf:tiff.pdf,files:"TIFF files (*.tif,*.tiff)|*.tif;*.tiff",title:"TIFF to PDF"
+file2pdf=exe:file2pdf.exe,ini:file2pdf.ini,defaultpdf:file.pdf,files:"All supported files (*.tif,*.jpg,*.txt,*.ini,*.bat)|*.tif;*.tiff;*.jpg;*.jpeg;*.txt;*.ini;*.bat",title:"(Plus Version) File to PDF"
+
+[toolsmenu]
+001=title:"Open &PDF File",inputext:pdf,input:"PDF File(*.pdf)|*.pdf",params:"open"
+005=title:"Edit Profile\file2pdf (Plus version)",exe:"file2pdf.ini",params:"open"
+006=title:"Edit Profile\jpeg2pdf",exe:"jpeg2pdf.ini",params:"open"
+007=title:"Edit Profile\tiff2pdf",exe:"tiff2pdf.ini",params:"open"
+008=title:"Edit Profile\txt2pdf",exe:"txt2pdf.ini",params:"open"
+009=title:"Edit DCF",input:"DCF File(*.dcf)|*.dcf",params:"open"
+010=title:"&TIFF Dump",exe:"tiffdump.exe %i",inputext:tif,input:"TIFF file(*.tif,*.tiff)|*.tif;*.tiff",params:"console,open"
+020=title:"-"
+030=title:"Maze\&Small Maze",exe:"pdfmaze.exe 5 -p small -o %o",outputext:pdf,output:"PDF file(*.pdf)|*.pdf",params:"console,open"
+040=title:"Maze\&Medium Maze",exe:"pdfmaze.exe 5 -p medium -o %o",outputext:pdf,output:"PDF file(*.pdf)|*.pdf",params:"console,open"
+050=title:"Maze\&Large Maze",exe:"pdfmaze.exe 5 -p large -o %o",outputext:pdf,output:"PDF file(*.pdf)|*.pdf",params:"console,open"
+060=title:"Maze\&Jumbo Maze",exe:"pdfmaze.exe -p jumbo -o %o",outputext:pdf,output:"PDF file(*.pdf)|*.pdf",params:"console,open"
+070=title:"-"
+080=title:"Plus Demos\pdfclock",exe:"pdfclock.exe %o",outputext:pdf,output:"PDF file(*.pdf)|*.pdf",params="console,open"
+090=title:"Plus Demos\fileconv",exe:"fileconv.exe %o",outputext:pdf,output:"PDF file(*.pdf)|*.pdf",params="console,open"
+100=title:"-"
+100=title:"Plus Version\Disable Plus Settings",exe:"dostd.bat",params:"console"
+
+[vardata]
+;abouttext=custom text goes here
+;abouturl=http://www.davince.com
+
+[tips]
+010=You can drag and drop files and directories from any Windows folder to the DaVince application window.
+020=You can change the conversion order of files by dragging them to the appropriate position.
+030=DaVince Tools automatically selects the appropriate converter based on the first file placed in the conversion window.
+040=You can subscribe to the DaVince mailing list at www.davince.com to receive the latest in product information.
+050=DaVince Tools' scripting language (DaVince Command File) allows one to customize or automate the conversion process.
+060=You can convert FORTRAN and COBOL generated reports to PDF, with optional green bar background, using the txt2pdf tool and one of the legacy profiles.
+070=You can convert files automatically to PDF by copying them to a directory specified using the watch folder option.
+080=You can press F1 to receive application help.
+090=You can remove a file specified for conversion by right clicking the file in the conversion window and specifying "Delete from list".
+100=You can copy the conversion output and paste it into another application by using the Edit menu in the Run window.
+
+; The following tips relate to DaVince Tools Plus features
+200=With DaVince Tools Plus, you can convert multiple file types into a single PDF file using the file2pdf converter.
+210=DaVince Tools Plus allows developers to write PDF producing programs by using the DaVince DLL library.
+220=You can quickly tell your registration status (unregistered, DaVince Tools Standard or DaVince Tools Plus) by using the "About DaVince Tools..." menu option.
+
+; The following tips relate to the tools menu.
+; Remove if customizing the tools menu.
+
+500=Need a diversion? Try your hand at solving a one-of-a-kind PDF maze created using pdfmaze, available from the Tools menu.
+510=You can open a PDF file directly from the Tools menu using the "Open PDF File" menu option.
+520=Conversion profiles can be added or modifed by selecting the appropriate converter under the "Edit Profile" option in the tools menu.
+

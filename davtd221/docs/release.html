@@ -1,0 +1,304 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Generator" content="Microsoft Word 97">
+   <meta name="Version" content="8.0.4308">
+   <meta name="Date" content="7/8/97">
+   <meta name="Template" content="C:\Program Files\Microsoft Office\Office\HTML.DOT">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (Win98; U) [Netscape]">
+   <title>DaVince Tools Release Notes</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#800080">
+
+<center>
+<h1>
+DaVince Tools Release Notes</h1></center>
+
+<center>Version: 2.2.1
+<br>Web Site: <a href="http://www.davince.com/">www.davince.com</a>
+<br>Last Modified: January 12, 2004</center>
+
+<p>For the latest release notes and documentation, refer to the on-line
+documentation at the <a href="http://www.davince.com"><b>DaVince Tools</b>
+web site</a> at <a href="http://www.davince.com/docs">http://www.davince.com/docs</a>.
+<p>These release notes are divided into the following categories:
+<p><a href="#version">Version History</a>
+<p><a href="#installation">Installation</a>
+<p><a href="#knownissues">Known Issues</a>
+<br>&nbsp;
+<br>&nbsp;
+<h2>
+<a NAME="version"></a>Version History</h2>
+January 5, 2004 (2.2.1) <b>All converters</b>: Fixed issue that created
+0 byte PDF files when an error occured in one to one mode. <b>jpeg2pdf</b>:
+Text annotations now work. <b>tiff2pdf</b>: Certain error messages now
+display correctly. <b>txt2pdf</b>: resetpagecounter now works correctly.
+Article threads in multi-column output no longer repeat last column on
+page.
+<p>July 12, 2003 (2.2.0) <b>New programs:</b> New plus version of DaVince
+Tools includes file2pdf, DaVince DLL Library and sample programs pdfclock,
+pdfconv and pdfhello. <b>tiff2pdf and tiffdump:</b> TIFF files with bad
+data pointers now work. <b>wdavince:</b> New features: Support for both
+standard and plus versions using separate configurations (switchable via
+menu option in tools menu), added Keywords field, customizable tools menu
+now allows sub menus, and tools menu items added to allow editing of converter
+.ini files and DCF files (using default text editor).
+<p>March 2, 2003 - (2.1.2) <b>All converters:</b> Fixed problem with the
+many to few feature (create 1 PDF file for each folder). <b>wdavince</b>:
+Windows apps now launch correctly when started from the tools menu. <b>Documentation</b>:
+Fixed several broken links.
+<p>January 6, 2003 - (2.1.1) <b>txt2pdf:</b> Tabs are now expanded to spaces
+according to the "tabspace" setting. <b>wdavince:</b> Fixed bug that occurred
+when specifying an invalid DCF filename on the command line.
+<p>December 1, 2002 - (2.1.0) <b>All converters</b>: New features: watch
+folder support, directory convert feature, annotations, verbose setting
+in DCF files, wildcard support in DCF "File" command. Fixes: registered
+copies now work in 16 bit shell on Windows NT/2000/XP (command.com). <b>tiff2pdf</b>:
+New feature: rotate image feature. Fix: corrected memory leak that occurred
+when reading TIFF files. <b>wdavince</b>: New features: watch folder wizard,
+directory convert option, tip of the day, settings now automatically saved.
+<p>June 23, 2002 - (2.0.3) <b>All converters:</b> fixed another 1 to 1
+problem that occurred when an alternate directory was specified for a filename.
+<p>June 2, 2002 - (2.0.2) <b>All converters</b>: fixed several problems
+that occurred when 1 to 1 specified.
+<p>February 3, 2002 - (2.0.1) <b>tiff2pdf</b>: Fixed reverse image problem
+when encountering an image compressed using PackBits and PhotometricInterpretation
+is set to 1. Fixed memory leak that occurred when converting using the
+1 to 1 option. <b>jpeg2pdf</b>: This version corrects an issue where some
+JPEG files would receive an error during conversion or they would convert
+without errors but would generate errors in the PDF viewer application.
+<p>December 13, 2001 - (2.0.0 Final) <b>All converters:</b> new "_common"
+profile, used to set default settings for all profiles for a particular
+converter. <b>tiff2pdf</b>: program now correctly skips over TIFF thumbnails
+when using archive mode. Tiled TIFF images converted using the archive
+option now displayed at the correct color.
+<p>November 16, 2001 - (2.0.0 Beta 3) <b>wdavince</b>: Added customizable
+tool menu feature, which can be used for running batch programs or launch
+other applications (tiffdump and pdfmaze are included in the default menu).
+<b>jpeg2pdf</b>:
+CMYK JPEG's now work. <b>All converters</b>: 1 to 1 conversion with a specified
+output directory now works in command files and wdavince.
+<b>txt2pdf</b>:
+Green bar feature now works correctly when converting files 1 to 1.
+<p>October 30, 2001 - (2.0.0 Beta 2) <b>New program</b>: wdavince, a Windows
+application for PDF conversion. Features include support for drag and drop
+file conversion, saving parameters in command file format, and automatic
+opening of newly created PDF file. <b>All converters(jpeg2pdf, tiff2pdf
+and txt2pdf):</b> fixed bug where PDF filename would be incorrect when
+converting files "1 to 1" and the original data file had a filename extension
+other than three characters long. <b>All programs</b>: The registration
+key file can now be stored in the same directory as the executable file
+in addition to the Windows directory. All "DaVince Tools" files can now
+be stored in a single directory structure (installation in the Windows
+directory is no longer required). <b>jpeg2pdf</b>: gray scale JPEG's now
+work.
+<p>August 28, 2001- (2.0.0 Beta 1) <b>All programs</b>: All .ini files
+can now be stored in the same directory as the executable file. This is
+an addition to the previous method of locating the .ini files in the Windows
+directory. If an ini file exists in both directories, the Windows directory
+takes precedence. As a result, the "INI" directory in the installation
+has been eliminated and all .ini files have been moved to the "EXE" directory.
+Refer to the <a href="#installation">installation instructions</a> for
+more discussion on this topic. <b>All converters(jpeg2pdf, tiff2pdf and
+txt2pdf): </b>New command file options: create, echo, info, and param.
+All command line options can now be specified within the command file.
+Profile options can now be individually set in the command file. <b>txt2pdf</b>:
+All font options now take an optional encoding parameter to allow for international
+character sets. New BarWizard option creates a "green bar" background on
+the page typically seen in legacy reports. New custom paper size option
+allows for non-standard paper sizes. New "legacy" wrap mode for FORTRAN
+and COBOL generated reports. <b>tiff2pdf:</b> Color (indexed, RGB and CMYK)
+and grayscale images supported (including thumbnails). Compression modes
+None, and PackBits are now supported. New archive mode option to force
+recompression of image data.
+<p>March 14, 2001- (1.3.0) <b>New program</b>: jpeg2pdf, use to convert
+JPEG files to PDF. <b>All programs:</b> Fixed memory leak when writing
+the PDF file. This was most noticeable when creating a large PDF file or
+creating many PDF's with the "-1" option. Fixed date problem in document
+info, which occurred in timezones east of GMT, and in timezones where the
+minute offset from GMT was not zero. Fixed bug in page buffering. It was
+found to occur in txt2pdf when a single page was slightly greater than
+8 KB in size, but it possibly could have occurred in other programs. Fixed
+a problem where a "deflate" error message could occur when compressing
+a page.<b> All converters(jpeg2pdf, tiff2pdf and txt2pdf):</b> All converters
+now support the same command line syntax, allowing, for example, one to
+one or many to one file conversions. Previously, txt2pdf, lacked many of
+the command line options that tiff2pdf supported. New command line option
+"-c" allows for specifying files, directories and .ini profile names from
+a command file instead of the command line. Bookmark names can be specified
+in the command file, instead of using the filename as the default bookmark
+name. Added "BookmarkFilenameExtension" parameter to .ini file. When set
+to true, bookmarks retain their filename extension, otherwise, the filename
+extension is dropped when the bookmark is created. For example, a filename
+of "README.TXT" will appear as "README" when set to false. The default
+setting is false. Added "OpenAction" parameter to .ini file. This parameter
+describes how to view the first page of the newly created PDF file when
+opened. Choices are "Fit" to fit entire page, "FitH" to fit the horizontal
+width of the page, "FitV" to fit the vertical width of the page, or "None",
+which defaults to the setting defined in the PDF viewer. The default setting
+is "None". Pressing Control-C to abort the program now cleans up all temporary
+files. Fixed bug when specifying both "-1" and "-r" options, converter
+would not descend into directories 2 levels or more down. <b>txt2pdf only:</b>
+Added "FileMatch" parameter to .ini file. This parameter allows setting
+a default file match pattern when specifying a directory. By default, this
+value is "*.txt,*.bat,*.ini". "Pagetrim" now works with files over 50 pages.
+<b>tiff2pdf
+only:</b> Fixed bug in CCITT uncompression (used in creating thumbnails).
+This bug would erroneously complain about bad data or an unsupported compression
+mode occasionally. Added "FileMatch" parameter to .ini file. This parameter
+allows setting a default file match pattern when specifying a directory.
+By default, this value is "*.tif,*.tiff". Added "DamagedRowCount" parameter
+to .ini file. This parameter is used when the TIFF file was received from
+a Group 3 Facsimile device and contains transmission errors. Setting this
+parameter to a positive number will allow the PDF reader to accept files
+with damaged rows up to this value. A value of "1" or "2" may be sufficient
+for most users. This parameter is only used with Group 3 files. Group 4
+files are not affected. By default, this value is "0" (no damaged rows
+allowed).
+<p>October 11, 2000- (1.2.0) <b>all program:</b> All program messages now
+consistently go to stdout, used to redirect output to a log file. All programs
+now return an error code of 1 when a fatal error occurs, used in batch
+programs to test the success of the program. <b>tiffdump:</b> Tiff reading
+routine is now more robust when encountering unknown data types. <b>txt2pdf:</b>
+Added page trim option to remove blank pages from either the front or back
+or both. Use "PageTrim=front|back|both|none" in the ini file to enable.
+<b>tiff2pdf:</b>
+Tiff reading routine is now more robust when encountering unknown data
+types. Added transparency option (must be disabled for Acrobat Capture
+use). Use "Transparency=true" in ini file to enable image transparency
+(default is false). Group 3/4 images using uncompressed mode no longer
+crash the program (an error is generated instead, since this is not yet
+supported). The "-o" option now works with -1 to provide an alternate output
+directory. Fixed memory leak when -1 was used with many files. Fixed memory
+leak when thumbnails were generated. Tiled tiff images can now be converted
+using tiff2pdf. When converting a directory, the program now looks for
+files ending in ".tiff" in addition to ".tif".
+<p>July 5, 2000- (1.1.1) Maintenance release. <b>all programs</b>: a new
+C++ compiler version is now used, which has increased performance and reduced
+the overall file size of all programs. <b>tiff2pdf:</b> Fixed problem with
+"-r" (recursion) option; thumbnails are now generated for certain TIFF
+files that displayed a thumbnail error in previous release. Fixed problem
+where certain converted TIFF files generated a "read less image data than
+expected" error in Acrobat (see the <a href="tiff2pdf.html#problem">"Problem
+TIFF files</a>" section in the <a href="tiff2pdf.html">tiff2pdf</a> documentation
+for further discussion). <b>txt2pdf</b>: Fixed problem where program aborted
+when form feeds were at the beginning of a file; bookmarks now point to
+the correct page; ASCII characters in the 128 to 255 range no longer give
+an error message.
+<p>March 20, 2000 - (1.1.0) Major enhancements made to <a href="tiff2pdf.html">tiff2pdf</a>
+and <a href="txt2pdf.html">txt2pdf</a>. Enhancements to tiff2pdf include
+thumbnail, bookmark and one to one Tiff to PDF options. Like txt2pdf, tiff2pdf
+now has an initialization file for these options, named "tiff2pdf.ini".
+Enhancments to txt2pdf include customizable header and footer, bookmark
+and full justification options. Documentation changes reflect new web domain:
+<a href="http://www.davince.com/">www.davince.com</a>.
+<p>November 5, 1999 - (1.0 B2) now works with Windows NT, environment variable
+"WINDIR" is now used instead of "WINBOOTDIR" when looking for the Windows
+directory in order to be compatible with both NT and Windows 9x.
+<p>October 28, 1999 - (1.0 B1) initial release
+<h2>
+<a NAME="installation"></a>Installation</h2>
+All <b>DaVince Tools</b> programs, help and sample files are contained
+in a single ZIP file. They are organized into the following directories:
+<br>&nbsp;
+<table BORDER=0 CELLSPACING=0 CELLPADDING=7 WIDTH="605" >
+<tr>
+<td VALIGN=TOP WIDTH="21%">\EXE</td>
+
+<td VALIGN=TOP WIDTH="79%">Executable programs and initialization files</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="21%">\DOCS</td>
+
+<td VALIGN=TOP WIDTH="79%">Documentation in HTML format</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="21%">\SAMPLE</td>
+
+<td VALIGN=TOP WIDTH="79%">Sample data for use with the executable programs</td>
+</tr>
+
+<tr>
+<td>\DLL</td>
+
+<td>Libraries, inlcude files and sample programs utilizing the DaVince
+DLL Library (Plus version).</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<p><b>For users upgrading from a previous release</b>: If you have modified
+your <b>DaVince Tools</b> initialization files in your Windows directory,
+do not copy over the newer release initialization files, otherwise, you
+will lose your changes. Make note of the new features in the initialization
+files and add them to your existing files.
+<p>To install <b>DaVince Tools</b>:
+<p>Create a new directory on your hard drive and unzip the files into this
+directory. You can find unzip shareware utilities at <a href="http://www.pkware.com/">http://www.pkware.com</a>
+and at <a href="http://www.winzip.com/">http://www.winzip.com</a>. If you
+want to run the programs from the command line instead of the Windows application
+wdavince, add the following line to the AUTOEXEC.BAT file:
+<p>PATH=toolsdirectory\EXE;%PATH%
+<p>Where "toolsdirectory" is the location where <b>DaVince Tools</b> was
+installed on your hard drive.
+<p>You can optionally copy the .ini files stored in the "EXE" directory
+to your Windows directory, although this is no longer a requirement beginning
+with version 2.0. Placing them in the Windows directory may be useful if
+you store "DaVince Tools" on a network drive. The .ini files stored in
+the "EXE" directory will be made available to your network users as a default.
+If they wish to customize the .ini files, they should copy them to their
+local Windows directory, which will take precedence over the .ini files
+on the network drive. Note that each network user is considered a separate
+user for licensing purposes. You may also wish to use the Windows directory
+location if you have made extensive changes to the .ini files and wish
+to use the same .ini files when upgrading to a newer release of "DaVince
+Tools".
+<p>Any "DaVince Tools" application that creates a PDF file will create
+a temporary file for storage of the page data. This temporary file is created
+in the directory pointed to by the "TMP" environment variable. If this
+environment variable does not exist, then the temporary file is created
+in the current directory (note: the Windows interface program, wdavince.exe,
+will automatically set this variable to the same string as the "TEMP" environment
+variable if "TMP" has not been set). Use of this environment variable is
+strongly suggested in a network environment, where writing the temporary
+file on a network drive can cause performance degradation. Check to see
+if "TMP" is defined by typing "SET" at the command prompt and look for
+a line starting "TMP=…". If not set, you can use the Windows temporary
+directory by adding the following line in the AUTOEXEC.BAT file:
+<p>SET TMP=C:\WINNT\TEMP
+<p>This example assumes that your Windows home directory is "C:\WINNT".
+<p>When installing <b>DaVince Tools</b>, note that the version of the converters
+should match the version of the Windows application wdavince. Mixing different
+versions of the converters with wdavince can cause the converters to behave
+incorrectly and it is not a recommended configuration. The version of wdavince
+can be found in the "About DaVince Tools…" option in the help menu. The
+version of a converter can be found by using the "-?" command line option.
+<h2>
+<a NAME="knownissues"></a>Known Issues</h2>
+When running <a href="wdavince.html">wdavince</a> with a 16 bit version
+of Windows (i.e. Windows 95/98/ME), the conversion output window is limited
+to 64,000 characters. Conversion will continue past this point but the
+window output will not be displayed.
+<p>If your mazes generated with <a href="pdfmaze.html">pdfmaze</a> print
+with thick lines in Acrobat, try using the "print as image" option when
+printing. This problem is not related to the PDF file, but may be your
+printer driver.
+<p>Multi-strip TIFF files converted to PDF using the <a href="tiff2pdf.html">tiff2pdf</a>
+program with the "Archive" option disabled may not download from the Internet
+correctly when using Acrobat as a browser plug-in. The symptom of this
+problem is the error message "Read less image data than expected" is displayed
+after downloading the image and various strips may not display correctly.
+Enabling the "archive" option, or saving the file to the hard drive first
+and then displaying the file locally corrects this problem.
+<p>Abnormal termination of an application that creates a PDF file may not
+delete the temporary file used for storing page data. You may want to delete
+these files to free up disk space. These files begin with "TMPS" and reside
+in the directory pointed to by the TMP environment variable, or reside
+in the current directory if TMP is not defined. Note that beginning with
+version 1.3, pressing Control-C to cancel the program within DOS now removes
+the temporary files.
+</body>
+</html>

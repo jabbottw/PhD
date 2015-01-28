@@ -1,0 +1,518 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Generator" content="Microsoft Word 97">
+   <meta name="Version" content="8.0.4308">
+   <meta name="Date" content="7/8/97">
+   <meta name="Template" content="C:\Program Files\Microsoft Office\Office\HTML.DOT">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (Win98; U) [Netscape]">
+   <title>DaVince Tools Converters</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#800080">
+
+<center>
+<h1>
+DaVince Tools Converters</h1></center>
+
+<center>Version: 2.2
+<p>Part of <a href="summary.html">DaVince Tools</a>
+<br>Web Site: <a href="http://www.davince.com/">www.davince.com</a>
+<p>Last Modified: July 22, 2003</center>
+
+<h3>
+Introduction</h3>
+All "DaVince Tools" converters contain a number of common features. Common
+<a href="#cli">command
+line syntax</a>, <a href="#ini">initialization file use</a>, <a href="#profile">common
+profile options</a> and a <a href="cmdfile.html">common scripting language</a>
+allow for a user to become familiar with all converters easily and also
+allows the tools to be easily integrated into the Windows interface application,
+<a href="wdavince.html">wdavince.exe</a>.
+<h3>
+<a NAME="cli"></a>Common Command Line Syntax</h3>
+The command line syntax for all the converters is the same:
+<p><i>(Please note that the square brackets "[" and "]" specify optional
+parameters; do not enter the brackets as part of the command)</i>
+<p>converter [-1] [-c commandfile] [-f] [-i key:value [-i key:value]] [-o
+outputfile] [-p profile] [-r] [-s] [-?] [file1 file2 ...]
+<p><b>Arguments:</b>
+<p>converter: The name of the converter: <a href="jpeg2pdf.html">jpeg2pdf</a>,
+<a href="tiff2pdf.html">tiff2pdf</a>
+or <a href="txt2pdf.html">txt2pdf</a>
+<p>-1: (numeric "one") Create one PDF file for each text file specified
+on the command line (one to one relationship). For each TIFF file specified,
+a PDF file is created in the same directory with the same name except with
+a ".PDF" extension. A PDF file is not created if one already exists and
+is newer than the corresponding text file. To force a PDF file to be created,
+use the "-f" option. If "-1" or "-2" options are not used, then the default
+is to take all specified files and combine them into a single PDF file
+(many to one relationship). The behavior of the "-o" option changes when
+using the "-1" option, as described below.
+<p>-2: Create one PDF file for each subdirectory (many to few relationship).
+For each directory specified on the command line, each subdirectory in
+that directory is scanned and all text files in that subdirectory are converted
+to a single PDF file. The behavior of the "-o" option changes when using
+the "-2" option, as described below. If the "-r" (recursion) option is
+used, then also convert all files in the subdirectory tree.
+<p>-c: Process commands in the specified command file. When using this
+argument, files and directories can be specified via a file instead of
+on the command line. <a href="cmdfile.html">Click here</a> for more info
+on command files.
+<p>-f: When used with the "-1" option, force overwriting an existing PDF
+file. By default, a PDF file may not be created with the "-1" option if
+the TIFF file is unchanged since the last time the PDF file was created.
+<p>-i: Specify Info dictionary attribute values like title and author of
+document. The following attributes are available for use:
+<br>&nbsp;
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="590" >
+<tr>
+<td VALIGN=TOP WIDTH="32%">
+<center><b>Attribute</b></center>
+</td>
+
+<td VALIGN=TOP WIDTH="68%">
+<center><b>Description</b></center>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="32%">Author</td>
+
+<td VALIGN=TOP WIDTH="68%">The name of the person who created the document.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="32%">Keywords</td>
+
+<td VALIGN=TOP WIDTH="68%">Key words associated with the document.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="32%">Subject</td>
+
+<td VALIGN=TOP WIDTH="68%">The subject of the document.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="32%">Title</td>
+
+<td VALIGN=TOP WIDTH="68%">The title of the document.</td>
+</tr>
+</table>
+
+<p>Note that the attribute names are case sensitive (first character in
+uppercase). This option can be specified multiple times when setting multiple
+dictionary attribute values. To specify an attribute along with its data,
+separate the two with a colon ":". You will need to enclose the string
+in quotes if there are spaces in the data. For example, to set the title
+of a document to "The Declaration of Independence", use the following parameter:
+<p>-i "Title:The Declaration of Independence"
+<p>In addition to these tags, custom tags can be used with this option;
+however, Acrobat Reader will not recognize them. The "CreationDate" and
+"Creator" attributes are automatically filled in by the program and cannot
+be overridden with this option.
+<p>-o: Specify the PDF filename to create, or the directory to store the
+newly created PDF if the "-1" or "-2" option is used. If a filename is
+specified, the ".pdf" extension should be included. If this option is not
+specified, the directory where the text files are found is used if the
+"-1" or "-2" option is used, otherwise, the filename in the table below
+in the current directory is assumed:
+<br>&nbsp;
+<table BORDER=0 CELLSPACING=0 CELLPADDING=7 WIDTH="638" >
+<tr>
+<td VALIGN=TOP WIDTH="50%">Converter</td>
+
+<td VALIGN=TOP WIDTH="50%">Default Filename</td>
+</tr>
+
+<tr>
+<td>file2pdf (Plus version)</td>
+
+<td>file.pdf</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">jpeg2pdf</td>
+
+<td VALIGN=TOP WIDTH="50%">jpeg.pdf</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">tiff2pdf</td>
+
+<td VALIGN=TOP WIDTH="50%">tiff.pdf</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">txt2df</td>
+
+<td VALIGN=TOP WIDTH="50%">text.pdf</td>
+</tr>
+</table>
+
+<p>This option is required when converting files from CD ROM using either
+the "-1" or "-2" options, since the default directory is not writeable.
+<p>-p: Specify a profile to use in the creation of the PDF file. Profiles
+contain conversion information such as margin and font settings and reside
+in the "txt2pdf.ini" file located in either the directory where the executable
+file resides or the windows base directory (typically "C:\WINDOWS" for
+Windows 9x, "C:\WINDIR" for Windows NT). If the file is present in both
+directories, the file located in the windows base directory takes precedence.
+The default profile "default" is used when this option is not specified.
+<p>-P: Specify a profile parameter on the command line. This allows one
+to specify profile parameters without the need for a <a href="cmdfile.htm">command
+file</a>. Specify the parameter in "key:value" format. Place quotes around
+the parameter if spaces are in the value. This option may be specified
+multiple times on the command line.
+<p>-r: When a directory is specified, search subdirectories (recursive
+search).
+<p>-s: Sort the filenames specified on the command line in alphanumeric
+order before processing them. Note that when a directory is specified on
+the command line, files in that directory are always sorted.
+<p>-?: A brief summary of arguments is displayed.
+<p>[file1 file2 …]: Specify one or more files to convert. Wild card characters
+such as "*" and "?" may be used.
+<h3>
+<a NAME="ini"></a>The Initialization File</h3>
+The initialization file is a text file that stores one or more profiles
+containing conversion options. This allows one to create a variety of profiles
+with different conversion definitions. To specify a profile on the command
+line, use the "-p" option. The profile can be picked easily from the Windows
+interface program after the appropriate converter is chosen. From a DaVince
+Command File, use the "profile" command to specify the profile.
+<p>"DaVince Tools" recognizes two predefined profile names. The "default"
+profile is used when no other profile name is specified. The "_common"
+profile is used to define a parameter for all profiles. This profile is
+applied prior to any other profile. This allows an option to be set globally.
+For example, the following _common profile:
+<p><tt>[_common]</tt>
+<br><tt>annotationtext=The data contained in this file is the property
+of ABC Inc.</tt>
+<p>will by default create this text annotation on all profiles, unless
+the option is overridden in a profile using the "annotationtext" option
+with a different value.
+<p>The profile name is enclosed in square brackets (i.e. "[default]"),
+followed by a list of profile options. The profile name is case sensitive,
+however, the profile options are not ("[default]" and "[Default]" are not
+the same profile). Profile names like [_common], which begin with an underscore,
+are hidden in the Windows interface program but are still valid profile
+names. The following is an example of a profile definition:
+<p><tt>[default]</tt>
+<br><tt>description=Default Profile</tt>
+<br><tt>bookmark=yes</tt>
+<br><tt>openaction=fit</tt>
+<br><tt>compression=yes</tt>
+<p>Multiple profiles can exist in the file. The "-p" command line option
+and the DaVince command file command "profile" determines which profile
+the program will use. Profile names are case sensitive. If no profile is
+specified on the command line, the default profile ("[default]") is used.
+<p>Several options can appear after the profile line. These statements
+have the following syntax:
+<p>setting=value
+<p>Where setting is the name of a valid setting (see below for a list of
+common options) and "value" is the value for the setting. Depending on
+the option, "value" can be a number, a string or a Boolean value. The following
+values are all valid for a Boolean value:
+<br>&nbsp;
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="460" >
+<tr>
+<td VALIGN=TOP WIDTH="42%"><b>Valid True Values</b></td>
+
+<td VALIGN=TOP COLSPAN="2" WIDTH="58%"><b>Valid False Values</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="42%">True, T, On, Enable, Yes, Y</td>
+
+<td VALIGN=TOP COLSPAN="2" WIDTH="58%">False, F, Off, Disable, No, N</td>
+</tr>
+</table>
+
+<p>These values are case insensitive (i.e. both "true" and "TRUE" are valid).
+<p>Each converter uses its own initialization file. The name of this file
+is the name of the converter with an ".INI" file extension. Thus for the
+three converters,
+<br>&nbsp;
+<table BORDER=0 CELLSPACING=0 CELLPADDING=7 WIDTH="638" >
+<tr>
+<td VALIGN=TOP WIDTH="50%"><b>Converter Name</b></td>
+
+<td VALIGN=TOP WIDTH="50%"><b>Initialization Filename</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">jpeg2pdf.exe</td>
+
+<td VALIGN=TOP WIDTH="50%">jpeg2pdf.ini</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">tiff2pdf.exe</td>
+
+<td VALIGN=TOP WIDTH="50%">tiff2pdf.ini</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">txt2pdf.exe</td>
+
+<td VALIGN=TOP WIDTH="50%">txt2pdf.ini</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<p>The location of the initialization file is typically in the same directory
+as the executable file. "DaVince Tools" ships with sample initialization
+files for all converters in the "exe" directory, which contains both the
+executable programs and the ".ini" files. The initialization file can also
+be located in the Windows' directory (typically "c:\windows" for Windows
+9X and "c:\winnt" for Windows NT/2000/XP). Putting the initialization file
+in the Windows directory may make sense for those who want to use the same
+profile options with multiple versions of the converter. The initialization
+file in the Windows directory takes precedence if the file is found in
+both directories.
+<h3>
+<a NAME="profile"></a>Common Profile Options</h3>
+Although there are a number of unique profile options defined for each
+converter, there is a large number of profile optons that are common to
+all converters. These profile options are defined either in the .ini file
+for the appropriate converter, defined in a DaVince Command File (DCF)
+using the param statement (i.e. "param bookmark true) or defined on the
+command line using the "-P" (uppercase P) option. The following table describes
+these profile options (option names are case insensitive):
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="590" >
+<tr>
+<td VALIGN=TOP WIDTH="38%"><b>Options</b></td>
+
+<td VALIGN=TOP WIDTH="23%"><b>Data Type</b></td>
+
+<td VALIGN=TOP WIDTH="38%"><b>Description</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">AnnotationAppearance</td>
+
+<td VALIGN=TOP WIDTH="23%">String</td>
+
+<td VALIGN=TOP WIDTH="38%">&nbsp;PDF page description of annotation. Use
+to specify font color. Default: "0 0 1 rg" (blue font color). For more
+information refer to the Adobe PDF Reference Manual for information on
+page descriptions.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">AnnotationFont</td>
+
+<td VALIGN=TOP WIDTH="23%">Fonts: Courier | Courier-Bold | Courier-BoldOblique
+| Courier-Oblique | Helvetica | Helvetica-Bold | Helvetica-BoldOblique
+| Helvetica-Oblique | Times-Roman | Times-Bold | Times-Italic | Times-BoldItalic
+| ZapfDingbats
+<p>Encodings: Default | WinAnsiEncoding | MacRomanEncoding | PdfDocEncoding</td>
+
+<td VALIGN=TOP WIDTH="38%">&nbsp;The name of the font and optional encoding.
+The font name can be the name of any of the 14 base fonts for Adobe reader.
+The font name is case sensitive (default font is Helvetica).
+<p>An optional encoding can be specified. The encoding name is also case
+sensitive (default encoding is WinAnsiEncoding).</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">AnnotationFontHeight</td>
+
+<td VALIGN=TOP WIDTH="23%">Number</td>
+
+<td VALIGN=TOP WIDTH="38%">Height of annotation, in points. Default: 10</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">AnnotationOptions</td>
+
+<td VALIGN=TOP WIDTH="23%">&nbsp;allpages=true|false</td>
+
+<td VALIGN=TOP WIDTH="38%">Comma separated options used to define how the
+annotation is created. Currently, one option is available:
+<p>allpages - Set to true if annotation is to appear on all pages, false
+if the annotation is to appear on the first page only
+<p>Default: allpages=false</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">AnnotationRectangle</td>
+
+<td VALIGN=TOP WIDTH="23%">Number Number Number Number</td>
+
+<td VALIGN=TOP WIDTH="38%">Rectangle definition of where the annotation
+will be placed on the page, in points. Define the lower left and upper
+right corners of the rectangle such as "x1 y1 x2 y2".
+<p>Positive #'s are relative to the bottom left corner of the page. Negative
+#'s are relative to the upper right corner.
+<p>Default value: 18 -38 -18 -18</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">AnnotationText</td>
+
+<td VALIGN=TOP WIDTH="23%">String</td>
+
+<td VALIGN=TOP WIDTH="38%">Text to be used for the annotation. Leave blank
+if no annotation is needed.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Bookmark</td>
+
+<td VALIGN=TOP WIDTH="23%">Bool</td>
+
+<td VALIGN=TOP WIDTH="38%">When true, create a bookmark for each file converted.
+The default is false.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">BookmarkFilenameExtension</td>
+
+<td VALIGN=TOP WIDTH="23%">Bool</td>
+
+<td VALIGN=TOP WIDTH="38%">When true, include filename extension in the
+bookmark name. Otherwise, ignore it. The default is false.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Compression</td>
+
+<td VALIGN=TOP WIDTH="23%">Bool</td>
+
+<td VALIGN=TOP WIDTH="38%">When true, compress the page description (image
+data is always compressed). The default value is false.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">DeleteDirectories</td>
+
+<td VALIGN=TOP WIDTH="23%">Bool</td>
+
+<td VALIGN=TOP WIDTH="38%"><b>WARNING: Use this option with caution</b>.
+Specifying this option, along with "DeleteFiles" set to true, will delete
+the subdirectories where the original files reside. The directory is deleted
+only if the directory is empty after deletions from "DeleteFiles" occurrs.
+<p>Default: false</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">DeleteFiles</td>
+
+<td VALIGN=TOP WIDTH="23%">Bool</td>
+
+<td VALIGN=TOP WIDTH="38%"><b>WARNING: Use this option with caution</b>.
+Specifying this option will delete the original file after conversion to
+PDF. This option is typically used in a watch folder type of command file.
+<p>Default: false</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Description</td>
+
+<td VALIGN=TOP WIDTH="23%">String</td>
+
+<td VALIGN=TOP WIDTH="38%">Description of profile. This description is
+displayed in the Windows version of "DaVince Tools"</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">FileMatch</td>
+
+<td VALIGN=TOP WIDTH="23%">String</td>
+
+<td VALIGN=TOP WIDTH="38%">This parameter allows setting a default file
+match pattern when specifying a directory to convert. This is a comma delimited
+list of file matching patterns. The default setting is:
+<p>txt2pdf: "*.txt,*.bat,*.ini"
+<br>tiff2pdf: "*.tif,*.tiff"
+<br>jpeg2pdf: "*.jpg, "*.jpeg"</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">FlateLevel</td>
+
+<td VALIGN=TOP WIDTH="23%">Integer: 1-9</td>
+
+<td VALIGN=TOP WIDTH="38%">An integer value specifying the compression
+level for the Flate algorithm. The Flate algorithm is used for compressing
+streams, images and thumbnails when the compression option is enabled.
+Setting this value to 9 results in the best compression but also takes
+the longest in computation time. A value of 1 provides the best performance
+but little or no compression. A value of 6 is regarded as a value that
+provides decent compression with adequate performance . The default setting
+is 9.</td>
+</tr>
+
+<tr>
+<td>GarbageCollection *</td>
+
+<td>Bool</td>
+
+<td>Enables and disables garbage collection. Garbage collection is done
+just prior to writing the PDF file to remove unreferenced information in
+the PDF file. It is required for the txt2pdf option PageTrim. The default
+is false.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Info</td>
+
+<td VALIGN=TOP WIDTH="23%">String</td>
+
+<td VALIGN=TOP WIDTH="38%">Use this parameter to set Info tags in the PDF
+file, like Title, Subject and Author. Info tags are case sensitive. Info
+tags specified on the command line will override these settings. This parameter
+is typically used in the _common profile to globally set Info tags for
+all profiles. Multiple tags are separated by commas. For example:
+<p>info=Title:DaVince Tools Generated PDF File,Author:DaVince Tools
+<br>&nbsp;
+<br>&nbsp;
+<p>Also refer to the <a href="cmdfile.html">command file interface</a>
+for another method of specifying Info tags.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">OpenAction</td>
+
+<td VALIGN=TOP WIDTH="23%">Fit, FitH, FitV, None</td>
+
+<td VALIGN=TOP WIDTH="38%">This parameter describes how to view the first
+page of the newly created PDF file when opened. Choices are "Fit" to fit
+entire page, "FitH" to fit the horizontal width of the page, "FitV" to
+fit the vertical width of the page, or "None", which defaults to the setting
+defined in the PDF viewer. The default setting is "None".</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">VerboseLevel</td>
+
+<td VALIGN=TOP WIDTH="23%">Number</td>
+
+<td VALIGN=TOP WIDTH="38%">Alters the amount of output that is generated.
+Two levels are currently defined:
+<p>1: display only messages about files that are converted (suppress "skipping"
+messages). This mode is used with watch folder command files.
+<p>2: display all messages
+<p>Default:2</td>
+</tr>
+</table>
+
+<p>* new in 2.2
+<h2>
+About DaVince Tools:</h2>
+Visit the <b>DaVince Tools</b> web site at <a href="http://www.davince.com/">http://www.davince.com</a>
+for the latest version of this software and the latest documentation. <b>DaVince
+Tools</b> is shareware and software registration is urged if you find these
+programs useful. You can register the software on-line at <a href="http://www.davince.com/">http://www.davince.com</a>.
+<p><b>DaVince Tools</b> was written in C++ using the <b>DaVince Class Library</b>,
+written by the same author as this program. The <b>DaVince Class Library</b>
+is a C++ library for developing PDF and TIFF applications. Contact the
+author at <a href="mailto:info@davince.com">info@davince.com</a> for more
+information on the availability of the class library.
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Generator" content="Microsoft Word 97">
+   <meta name="Template" content="C:\Program Files\Microsoft Office\Office\HTML.DOT">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (Win98; U) [Netscape]">
+   <title>tiffdump - View The Data Structure of a TIFF File</title>
+</head>
+<body link="#0000FF" vlink="#800080">
+
+<center>
+<h1>
+tiffdump – View The Data Structure of a TIFF File</h1></center>
+
+<center>Version: 2.2
+<p>Part of <a href="summary.html">DaVince Tools</a>
+<br>Web Site: <a href="http://www.davince.com/">www.davince.com</a>
+<p>Last Modified: July 22, 2003</center>
+
+<p><br>
+<h2>
+Command Syntax:</h2>
+<i>(Please note that the square brackets "[" and "]" specify optional parameters;
+do not enter the brackets as part of the command)</i>
+<p>tiffdump [–h] [–i ifdnum] [-?] file
+<p><b>Arguments:</b>
+<p>-h: Display numeric values as hexadecimal
+<p>-i ifdnum: Display only this IFD (default is to display all IFD’s)
+<p>-?: A brief summary of arguments is displayed
+<p>file: Specify the name of the TIFF file to generate a tag summary.
+<br>&nbsp;
+<br>&nbsp;
+<h2>
+Description:</h2>
+"tiffdump" is a command line program that views the tag data structure
+of a TIFF file. This program does not extract image data. To fully understand
+the output of this program, you should be familiar with the TIFF file format.
+For more information on the TIFF file data structure, refer to the TIFF
+6 specification, which can be found at the Adobe web site http://www.adobe.com.
+<p>By default, all image file directories (IFD’s) are displayed. Multiple
+IFD’s are typically found in multi-page TIFF files and TIFF files with
+attached thumbnail or mask images. If this is a multi IFD TIFF file, you
+can display a selected IFD by using the "-i" option.
+<br>&nbsp;
+<br>&nbsp;
+<h2>
+Other information displayed by the program:</h2>
+CPU Byte Order: the byte order used by the hardware executing "tiffdump".
+For Intel platforms, this value is "little" for little endian. For Macintosh,
+Solaris and AIX platforms, this value is "big" for big endian.
+<p>File Byte Order: the byte order used in the TIFF file. Typically it
+is the same byte order as the computer that created the file, which may
+not the same byte order of the computer reading the file. For example,
+a TIFF file created on a Macintosh will have a file byte order of "Big",
+and when reading this file on an Intel PC, the CPU byte order will be "Little".
+<br>&nbsp;
+<br>&nbsp;
+<h2>
+About DaVince Tools:</h2>
+Visit the <b>DaVince Tools</b> web site at <a href="http://www.davince.com/">http://www.davince.com</a>
+for the latest version of this software and the latest documentation. <b>DaVince
+Tools</b> is shareware and software registration is urged if you find these
+programs useful. You can register the software on-line at <a href="http://www.davince.com/">http://www.davince.com</a>.
+<p><b>DaVince Tools</b> was written in C++ using the <b>DaVince Class Library</b>,
+written by the same author as this program. The <b>DaVince Class Library</b>
+is a C++ library for developing PDF and TIFF applications. Contact the
+author at <a href="mailto:info@davince.com">info@davince.com</a> for more
+information on the availability of the class library.
+</body>
+</html>

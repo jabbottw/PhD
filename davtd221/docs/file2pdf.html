@@ -1,0 +1,129 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Generator" content="Microsoft Word 97">
+   <meta name="Template" content="C:\Program Files\Microsoft Office\Office\HTML.DOT">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (Win98; U) [Netscape]">
+   <title>file2pdf - Convert TIFF, JPEG and Text Files to PDF</title>
+</head>
+<body link="#0000FF" vlink="#800080">
+
+<center>
+<h1>
+file2pdf – Convert TIFF, JPEG and Text Files to PDF</h1></center>
+
+<center>Version: 2.2
+<p>Part of <a href="summary.html">DaVince Tools Plus</a>
+<br>Web Site: <a href="http://www.davince.com/">www.davince.com</a>
+<p>Last Modified: July 22, 2003</center>
+
+<p><a href="#syntax">Command Syntax</a>
+<p><a href="#description">Description</a>
+<p><a href="#newfeatures">New Features / Changes</a>
+<p><a href="#information">Additional Information</a>
+<p><a href="#about">About DaVince Tools</a>
+<p>
+<hr>
+<h2>
+<a NAME="syntax"></a>Command Syntax:</h2>
+<a NAME="description"></a>Refer to the <a href="convert.html">"DaVince
+Tools" Converters</a> page for a description of the command line syntax
+for all converters.
+<h2>
+Description:</h2>
+"file2pdf" is a command line program that converts TIFF, JPEG and text
+files to PDF (Portable Document Format) files (for a Windows interface
+to this program, see <a href="wdavince.html">wdavince</a>). This program
+is available only to <b>DaVince Tools Plus</b> users.&nbsp; The key features
+of this program are:
+<ul>
+<li>
+Combines all the features of <a href="tiff2pdf.html">tiff2pdf</a>, <a href="jpeg2pdf.html">jpeg2pdf</a>
+and <a href="txt2pdf.html">txt2pdf</a></li>
+
+<li>
+Create PDF files from multiple file types</li>
+
+<li>
+Utilizes the DaVince Tools DLL library, a PDF generating module that can
+be utilized by programmers to add PDF generation to their programs.</li>
+
+<li>
+PDF file compression support</li>
+
+<li>
+Automatic bookmark creation option</li>
+
+<li>
+Convert many files to one PDF, a directory of files to one PDF, or create
+a PDF file for each file</li>
+
+<li>
+Individual filenames with wildcard support and/or an entire directory may
+be specified for conversion</li>
+
+<li>
+Specify files or directories to convert either via the command line or
+a command file</li>
+
+<li>
+Large file support (1,000+ pages)</li>
+
+<li>
+Creates a version 1.2 PDF file with a unique file ID in trailer</li>
+</ul>
+The initialization file and the use of profiles is described in the
+<a href="convert.html">"DaVince
+Tools" Converters</a> page. Since this converter combines the features
+of <a href="tiff2pdf.html">tiff2pdf</a>, <a href="jpeg2pdf.html">jpeg2pdf</a>
+and <a href="txt2pdf.html">txt2pdf</a>, profile settings from these converters
+can be combined into a single profile.Common profile settings as well as
+converter specific settings can be used in a profile.
+<h3>
+Common Profile Settings</h3>
+Refer to the <a href="convert.html">"DaVince Tools" Converters</a> page
+for a description of the common profile settings.
+<h3>
+Converter Specific Settings</h3>
+The special profile name "_converter" is used to define the converter to
+use for each recognized file type. By default, the profile is defined as
+follows:
+<p>[_converter]
+<br>tiff=tiff,tif
+<br>jpeg=jpeg,jpg
+<br>text=txt,ini,bat
+<p>The default assigns the file types to the three converters. For example,
+all files ending in ".txt" will be converted using the text converter.&nbsp;
+If a file type is encountered that is not defined by any converter, it
+is skipped. File types can be added to one of the converters if one wishes
+to include them in conversion.
+<p>A default profile is defined, however, most users will want to create
+their own profiles that combine profile settings of other converters.
+<h2>
+<a NAME="newfeatures"></a>New Features / Changes</h2>
+A list of new features and changes, along with a version history, can be
+found in the <a href="release.html#version">release notes.</a>
+<h2>
+<a NAME="information"></a>Additional Information:</h2>
+Any tool that creates a PDF must create an intermediate file prior to writing
+the PDF file. The filename of this intermediate file begins with "tmps"
+and appears in the directory pointed to by the environment variable "TMP".
+If this environment does not exist, then the temporary file is written
+in the current directory. The intermediate file exists only during the
+execution of the program.
+<br>&nbsp;
+<br>&nbsp;
+<h2>
+<a NAME="about"></a>About DaVince Tools:</h2>
+Visit the <b>DaVince Tools</b> web site at <a href="http://www.davince.com/">http://www.davince.com</a>
+for the latest version of this software and the latest documentation. <b>DaVince
+Tools</b> is shareware and software registration is urged if you find these
+programs useful. You can register the software on-line at <a href="http://www.davince.com/">http://www.davince.com</a>.
+<p><b>DaVince Tools</b> was written in C++ using the <b>DaVince Class Library</b>,
+written by the same author as this program. The <b>DaVince Class Library</b>
+is a C++ library for developing PDF and TIFF applications. Contact the
+author at <a href="mailto:info@davince.com">info@davince.com</a> for more
+information on the availability of the class library.
+</body>
+</html>

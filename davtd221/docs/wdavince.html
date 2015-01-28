@@ -1,0 +1,532 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Generator" content="Microsoft Word 97">
+   <meta name="Template" content="C:\Program Files\Microsoft Office\Office\HTML.DOT">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (Win98; U) [Netscape]">
+   <title>wdavince - Windows Application for PDF Conversion</title>
+</head>
+<body link="#0000FF" vlink="#800080">
+
+<center>
+<h1>
+wdavince – Windows Application for PDF Conversion</h1></center>
+
+<center>Version: 2.2
+<p>Part of <a href="summary.html">DaVince Tools</a>
+<br>Web Site: <a href="http://www.davince.com/">www.davince.com</a>
+<p>Last Modified: July 22, 2003</center>
+
+<h2>
+Command Syntax:</h2>
+<i>(Please note that the square brackets "[" and "]" specify optional parameters;
+do not enter the brackets as part of the command)</i>
+<p>wdavince [file1] [file2] … [filen]
+<p>or
+<p>wdavince file.dcf
+<p><b>Arguments:</b>
+<p>file1, file2, filen: Specify the name(s) of a file to be converted
+<p>file.dcf : A DCF file to execute when first starting up the program
+(must have a ".dcf" extension)
+<br>&nbsp;
+<h2>
+Description</h2>
+<b>wdavince</b> is a Windows application used for converting files to PDF.
+It creates a GUI interface for both "DaVince Tools" and "DaVince Tools
+Plus". The features of this application include:
+<ul>
+<li>
+A single GUI interface for use with all "DaVince Tools"/"DaVince Tools
+Plus" converters and add-on programs</li>
+
+<li>
+Drag and drop files and/or directories for conversion, either from within
+the application or from the Windows desktop</li>
+
+<li>
+Use the GUI interface for converting files or creating DaVince Command
+Files (DCF) for future conversions</li>
+
+<li>
+Run previously saved DCF files</li>
+
+<li>
+Graphically choose converter and profile to use for conversion</li>
+
+<li>
+Convert files in a watched folder</li>
+
+<li>
+Profile names are displayed along with their description</li>
+
+<li>
+Automatically launch the PDF viewer after conversion (all files/many to
+one conversion only)</li>
+
+<li>
+Conversion output is in scrollable window and can easily be copied to the
+clipboard</li>
+
+<li>
+Application settings are automatically maintained between sessions</li>
+
+<li>
+Customizable tools menu allows for running other applications like tiffdump
+and pdfmaze</li>
+
+<li>
+Tip of the day and on-line documentation available from the Help menu</li>
+
+<li>
+Link to home page and registration information available from the Help
+menu</li>
+</ul>
+"DaVince Tools Plus" settings can be enabled or disabled using the menu
+option in the tools menu. Enabling these "Plus" settings adds the file2pdf
+converter to the converters list as well as adds the DLL sample programs
+to the tools menu. Enabling the "Plus" settings only displays these options,
+it does not change the registration status. You still need to register
+"DaVince Tools Plus" if you decide to use this program and remove the unregistered
+annotations that may appear in the "Plus" applications.
+<p>Below is a screen shot of <b>wdavince</b>:
+<br>&nbsp;
+<br>&nbsp;
+<p><img SRC="wdavince.gif" height=442 width=690>
+<h2>
+&nbsp;</h2>
+
+<h2>
+&nbsp;Converter Options</h2>
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=7 WIDTH="638" >
+<tr>
+<td VALIGN=TOP WIDTH="50%">Converter and Profile</td>
+
+<td VALIGN=TOP WIDTH="50%">Select appropriate converter and profile. This
+is automatically filled in with the first file added to the conversion
+list ("default" profile is assumed). A description of the profile is displayed
+if a "description" option is included in the profile.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">Title, Subject, Author, Keywords</td>
+
+<td VALIGN=TOP WIDTH="50%">The title, subject, author and keywords fields
+that will be filled in the newly created PDF file.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">Create 1 PDF for: All Files, Each File, Each
+Folder&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="50%">Either combine multiple files into one PDF,
+create one PDF for each file, or create one PDF for each folder, respectively.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">Include Subfolders</td>
+
+<td VALIGN=TOP WIDTH="50%">Include all subfolders when converting folders.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">Overwrite Existing PDF Files</td>
+
+<td VALIGN=TOP WIDTH="50%">Used when "Each File" is set, disabling this
+option will skip converting a file if the resulting PDF file already exists
+AND the PDF file date is newer than the original file date.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">Open PDF After Conversion</td>
+
+<td VALIGN=TOP WIDTH="50%">Used when "All Files" is set, enabling this
+option will automatically launch the PDF viewer with the just converted
+PDF file.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">Output PDF File/Output Directory</td>
+
+<td VALIGN=TOP WIDTH="50%">When "All Files" is set, "Output PDF File" specifies
+the PDF filename to create. If blank, the name of the PDF file will be
+the converter's default name. For example, "tiff.pdf" is the default name
+when converting TIFF files.&nbsp;
+<p>When "Each File" or "Each Folder" is set, "Output Directory" specifies
+the folder where the newly created PDF files will be stored. If left blank,
+the PDF files will be stored in the same directory as the data file or
+folder.</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<br>&nbsp;
+<h2>
+Menu Options</h2>
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=7 WIDTH="638" >
+<tr>
+<td VALIGN=TOP WIDTH="50%">File Menu:</td>
+
+<td VALIGN=TOP WIDTH="50%">&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<dir>
+<dir>Save to DCF…</dir>
+</dir>
+</td>
+
+<td VALIGN=TOP WIDTH="50%">Save current settings to a DaVince command file.
+This command file can be executed later by using the "Run Command File…"
+menu option.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<dir>
+<dir>Exit</dir>
+</dir>
+</td>
+
+<td VALIGN=TOP WIDTH="50%">Exit the Program</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">Edit Menu:</td>
+
+<td VALIGN=TOP WIDTH="50%">&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<dir>
+<dir>Reset Fields</dir>
+</dir>
+</td>
+
+<td VALIGN=TOP WIDTH="50%">Reset fields to their default value</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<dir>
+<dir>Refresh</dir>
+</dir>
+</td>
+
+<td VALIGN=TOP WIDTH="50%">Refreshes directory and file lists</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<dir>
+<dir>Cut, Copy, Paste</dir>
+</dir>
+</td>
+
+<td VALIGN=TOP WIDTH="50%">Cut, copy or paste field data to or from the
+clipboard</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">Run Menu:</td>
+
+<td VALIGN=TOP WIDTH="50%">&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<dir>
+<dir>Run</dir>
+</dir>
+</td>
+
+<td VALIGN=TOP WIDTH="50%">Convert the specified files</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<dir>
+<dir>Run Command File…</dir>
+</dir>
+</td>
+
+<td VALIGN=TOP WIDTH="50%">Execute a DaVince command file.These files can
+be created manually or automatically using the "Save to DCF…" menu option.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<dir>
+<dir>Watch Folder(s)…</dir>
+</dir>
+</td>
+
+<td VALIGN=TOP WIDTH="50%">Display watch folder window.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">Tools Menu</td>
+
+<td VALIGN=TOP WIDTH="50%">This menu is customizable, which is used to
+launch other applications. It also may be completely removed if desired.
+The default installation includes menu items for opening PDF files, modifying
+profile settings, tiffdump, pdfmaze and access to sample DaVince Tools
+Plus programs.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">Help Menu</td>
+
+<td VALIGN=TOP WIDTH="50%">&nbsp;</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<dir>
+<dir>DaVince Tools Help…</dir>
+</dir>
+</td>
+
+<td VALIGN=TOP WIDTH="50%">On-line help in HTML format</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<dir>
+<dir>DaVince Home Page</dir>
+</dir>
+</td>
+
+<td VALIGN=TOP WIDTH="50%">Product web site</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<dir>
+<dir>Tip of the Day…</dir>
+</dir>
+</td>
+
+<td VALIGN=TOP WIDTH="50%">Display tip of the day window</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<dir>
+<dir>Register</dir>
+</dir>
+</td>
+
+<td VALIGN=TOP WIDTH="50%">Link to registration information</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<dir>
+<dir>Install License Key…</dir>
+</dir>
+</td>
+
+<td VALIGN=TOP WIDTH="50%">Prompt for the license key received when registering
+the product and install it.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">
+<dir>
+<dir>About DaVince Tools…</dir>
+</dir>
+</td>
+
+<td VALIGN=TOP WIDTH="50%">A dialog box displaying the version number and
+the registration status.</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<br>&nbsp;
+<h2>
+How to Specify Files or Folders for Conversion</h2>
+There are several ways in which a file or folder can be specified for conversion:
+<ul>
+<li>
+Double click files in the file list box in the upper right corner of the
+application window.</li>
+
+<li>
+Drag and drop files from the file list box or the folder box to the conversion
+box at the lower right corner of the application.</li>
+
+<li>
+Drag files or folders from the desktop or another window to the application
+window.</li>
+
+<li>
+Drag files or folders from the desktop or another window to the application's
+shortcut, if available.</li>
+</ul>
+Files and folders listed in the conversion box can be reordered by dragging
+and dropping them from within the same window. Files and folders can be
+removed from the conversion box by clicking on them and pressing the &lt;Delete>
+key, or right clicking on them and choosing the delete option from the
+popup menu.
+<br>&nbsp;
+<br>&nbsp;
+<p>The output of a sample conversion appears below:
+<p><img SRC="convert.gif" height=375 width=401>
+<h2>
+&nbsp;</h2>
+
+<h2>
+Using the Watch Folders Feature</h2>
+The watch folders feature can be accessed by either selecting the item
+under the run menu or by clicking on the appropriate button in the button
+bar. The watch folder window appears as follows:
+<br>&nbsp;
+<br>&nbsp;
+<p><img SRC="watch.gif" height=498 width=373>
+<p>This feature allows one to have a folder watched for incoming files.
+As files appear in one or more defined folders, they are converted to PDF
+using the specified converter and profile.&nbsp; For a frequently watched
+folder, the settings can be saved to a DCF file using the "Save…" button.
+This allows the folder to be watched later by using the "Run Command File…"
+menu option and specifying this DCF file. After conversion, the original
+file can be moved from the watch folder to the PDF folder, it can be deleted,
+or it can be left alone.
+<p>Under the "Edit" menu, the single option "Reset Fields" resets all fields
+(except the watch folders field) to the original settings.
+<h2>
+Limitations of the Unregistered Version</h2>
+The unregistered version of "DaVince Tools" allows full use of all program
+features. Unregistered copies will create an unregistered notice within
+the PDF file, and the Windows application will notify the user of its unregistered
+status after each conversion. This notice within the PDF file will disappear
+for all future conversions after you register your copy of "DaVince Tools".
+Previous conversions will have to be re-run in order to remove the unregistered
+notice. You are encouraged to register your software by clicking on the
+"Register" menu item under the "Help" menu.
+<h2>
+Customizing the Tools Menu</h2>
+The Tools menu is completely customizable. It can also be removed from
+the application if desired. The Tools menu is defined in the wdavince.ini
+file. It is located in the "[toolsmenu]" section. To remove the tools menu,
+rename the "[toolsmenu]" name or delete the section in its entirety (for
+example: "[_toolsmenu]"). Below is a sample line from the "[toolsmenu]"
+section:
+<p><tt>010=title:"TIFF Dump",exe:"tiffdump.exe %i",inputext:tif,input:"TIFF
+file(*.tif,*.tiff)|*.tif;*.tiff",params:"console,open"</tt>
+<p>The first parameter in the line ("010") specifies the ordering sequence
+of
+the item in the Tools menu. The actual value is not important, but its
+ordering sequence is important. The ordering sequence is based on the alphanumeric
+sorting sequence of the items and does not need to be sequential. Alphanumeric
+sorting requires leading zeros in numbers. This means a sequence value
+of "15" would appear before a value of "3", but not "03".
+<p>The sequence value is followed by an equals sign ("="). This is then
+followed by a series of comma delimited parameters used for defining the
+menu item. The following parameters are allowed for defining the tool menu
+item:
+<br>&nbsp;
+<br>&nbsp;
+<table BORDER=0 CELLSPACING=0 CELLPADDING=7 WIDTH="638" >
+<tr>
+<td VALIGN=TOP WIDTH="50%">title</td>
+
+<td VALIGN=TOP WIDTH="50%">The title to use in the menu. Create the shortcut
+character by inserting an ampersand character (&amp;) before the shortcut
+character. To create a separator bar in the menu, use a single dash as
+its title ("-")</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">exe</td>
+
+<td VALIGN=TOP WIDTH="50%">The filename of a data file or executable file
+with any associated parameters. It should be located either in the "DaVince
+Tools" exe directory, or it should be in the path, otherwise, the full
+pathname must be specified. Single quotes should surround the data file
+or executable file name if the path contains spaces.&nbsp; If an executable
+file name is used and an input file parameter is expected, use "%i" in
+the command line. If the command expects an output file to be specified,
+use "%o" in the command line. The "%i" and "%o" options will fill in the
+input and output filenames on the command line by displaying the appropriate
+file dialog box to the user.</td>
+</tr>
+
+<tr>
+<td>priority</td>
+
+<td>Priority value for the converter. Priority is used to when guessing
+the converter to use when none has been specified and a file has just been
+dropped into the conversion window.&nbsp; If two or more converters share
+a common file type, the converter with the higher priority will be chosen
+over one with a lower priority. For example, both tiff2pdf and file2pdf
+convert tiff files. If tiff2pdf has a higher priority specified, then it
+will be chosen over file2pdf.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">input</td>
+
+<td VALIGN=TOP WIDTH="50%">The filter definition to be used in the open
+dialog box.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">inputext</td>
+
+<td VALIGN=TOP WIDTH="50%">The default file extension to be used with the
+input file.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">output</td>
+
+<td VALIGN=TOP WIDTH="50%">The filter definition to be used in the save
+dialog box.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">outputext</td>
+
+<td VALIGN=TOP WIDTH="50%">The default file extension when creating the
+output file, which is used by the save dialog box.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">params</td>
+
+<td VALIGN=TOP WIDTH="50%">Additional comma delimited parameters that can
+be used to define the behavior of the tool. This item must be enclosed
+in quotes since it uses the same delimiter. These parameters are:&nbsp;
+<p>console - Run the tool in the "DaVince Tools" console window.&nbsp;
+<p>open - open the output file with its default viewer. For example, a
+PDF file will be opened by Acrobat Reader or Exchange. When using the open
+parameter with "exe" parameter, you must include the "%o" option in order
+for this to work. To open an existing file (i.e. a previously created PDF
+file), include the inputext and input parameters (the exe parameter is
+not needed).&nbsp; Snother way to open an existing file is to include the
+inputext, input and exe parameter of "%i" (the params parameter is not
+needed in this case).</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<br>&nbsp;
+<h2>
+About DaVince Tools:</h2>
+Visit the <b>DaVince Tools</b> web site at <a href="http://www.davince.com/">http://www.davince.com</a>
+for the latest version of this software and the latest documentation. <b>DaVince
+Tools</b> is shareware and software registration is urged if you find these
+programs useful. You can register the software on-line at <a href="http://www.davince.com/">http://www.davince.com</a>.
+<p><b>DaVince Tools</b> was written in C++ using the <b>DaVince Class Library</b>,
+written by the same author as this program. The <b>DaVince Class Library</b>
+is a C++ library for developing PDF and TIFF applications. Contact the
+author at <a href="mailto:info@davince.com">info@davince.com</a> for more
+information on the availability of the class library.
+</body>
+</html>

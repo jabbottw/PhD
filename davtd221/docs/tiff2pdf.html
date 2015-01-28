@@ -1,0 +1,456 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Generator" content="Microsoft Word 97">
+   <meta name="Template" content="C:\Program Files\Microsoft Office\Office\HTML.DOT">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (Win98; U) [Netscape]">
+   <title>tiff2pdf - Convert TIFF Files to PDF Files</title>
+</head>
+<body link="#0000FF" vlink="#800080">
+
+<center>
+<h1>
+tiff2pdf – Convert TIFF Files to PDF</h1></center>
+
+<center>Version: 2.2
+<p>Part of <a href="summary.html">DaVince Tools</a>
+<br>Web Site: <a href="http://www.davince.com/">www.davince.com</a>
+<p>Last Modified: July 22, 2003</center>
+
+<p><a href="#syntax">Command Syntax</a>
+<p><a href="#description">Description</a>
+<p><a href="#problem">Problem TIFF Files</a>
+<p><a href="#newfeatures">New Features / Changes</a>
+<p><a href="#information">Additional Information</a>
+<p><a href="#about">About DaVince Tools</a>
+<p>
+<hr>
+<h2>
+<a NAME="syntax"></a>Command Syntax</h2>
+Refer to the <a href="convert.html">"DaVince Tools" Converters</a> page
+for a description of the command line syntax for all converters.
+<h2>
+<a NAME="description"></a>Description</h2>
+"tiff2pdf" is a command line program that converts TIFF (Tagged Image File
+Format) files to PDF (Portable Document Format) files (for a Windows interface
+to this program, see <a href="wdavince.html">wdavince</a>). The program
+can convert a TIFF file by either recompressing the data for PDF use or
+taking the raw image data from the file "as is" and putting it into a PDF
+wrapper when possible. This analogous to removing a letter from a letter
+size envelope and placing it in a business size envelope. The original
+image data is unaltered, so no data recompression is required (not all
+TIFF raw image data is compatible with PDF; these files will automatically
+be recompressed). The key features of this program are:
+<ul>
+<li>
+TIFF compression modes 1, 2, 3, 4 and 32773 support</li>
+
+<li>
+Single and multi-strip file support</li>
+
+<li>
+Tiled TIFF file support</li>
+
+<li>
+Single and multi-page file support</li>
+
+<li>
+Monochrome, grayscale and color (indexed, RGB and CMYK) image support</li>
+
+<li>
+Thumbnail and bookmark support</li>
+
+<li>
+Convert many TIFF files to one PDF (many to one), create a PDF file for
+each specified TIFF file (one to one), or create a PDF file for each TIFF
+subdirectory specified (many to few)</li>
+
+<li>
+Individual filenames with wildcard support and/or an entire directory may
+be specified for conversion</li>
+
+<li>
+Specify files or directories to convert either via the command line or
+a command file</li>
+
+<li>
+Large file support (1,000+ pages)</li>
+
+<li>
+Compatible with Acrobat Capture for OCR conversion of image data</li>
+
+<li>
+Creates a version 1.2 PDF file with a unique file ID in trailer</li>
+
+<li>
+Quick conversion of data option uses existing compressed image data in
+PDF file, resulting in faster conversion time</li>
+
+<li>
+Archive conversion of data option recompresses image data creating smaller
+PDF files in many cases</li>
+</ul>
+The following TIFF tags are required in order for the file to be converted.
+If any of these tags are missing, the application will skip over the image.
+The "<a href="tiffdump.html">tiffdump</a>" program, part of <a href="summary.html">DaVince
+Tool set</a>, can be used to display the tags of a TIFF file.
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="588" >
+<tr>
+<td VALIGN=TOP WIDTH="29%">ImageLength</td>
+
+<td VALIGN=TOP WIDTH="71%">The # of scan lines of an image</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="29%">ImageWidth</td>
+
+<td VALIGN=TOP WIDTH="71%">The # of pixels in a scan line of an image</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="29%">Compression</td>
+
+<td VALIGN=TOP WIDTH="71%">The type of compression used (valid values are:
+2 (Modified Huffman), 3 (Group 3) and 4 (Group 4)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="29%">StripOffsets/TileOffsets</td>
+
+<td VALIGN=TOP WIDTH="71%">Array of one or more offsets to image data</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="29%">StripByteCounts/TileByteCounts</td>
+
+<td VALIGN=TOP WIDTH="71%">Array of one or more values of lengths pointed
+to by the StripOffsets tag for stripped images, or TileOffsets for tiled
+images</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="29%">TileLength</td>
+
+<td VALIGN=TOP WIDTH="71%">The # of scan lines in a tile (only required
+for tiled Tiff images)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="29%">TileWidth</td>
+
+<td VALIGN=TOP WIDTH="71%">The # of pixels in a scan line in a tile (only
+required for tiled Tiff images)</td>
+</tr>
+</table>
+
+<p>The following TIFF tags are recognized by tiff2pdf but are not required
+for a conversion.
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="588" >
+<tr>
+<td VALIGN=TOP WIDTH="29%">NewSubFileType</td>
+
+<td VALIGN=TOP WIDTH="71%">Used to skip over thumb nail and transparency
+mask images</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="29%">Xresolution</td>
+
+<td VALIGN=TOP WIDTH="71%">The scan resolution in the X direction. If this
+tag is not present, then either 300 dpi or the resolution specified by
+the DefaultDPI option is used.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="29%">Yresolution</td>
+
+<td VALIGN=TOP WIDTH="71%">The scan resolution in the Y direction. If this
+tag is not present, then either 300 dpi or the resolution specified by
+the DefaultDPI option is used.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="29%">ResolutionUnit</td>
+
+<td VALIGN=TOP WIDTH="71%">Used to specify the XResolution and Yresolution
+tags are in inches or centimeters (default is ‘inches’ if tag is not present)</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="29%">BitsPerSample</td>
+
+<td VALIGN=TOP WIDTH="71%">Number of bits per component.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="29%">SamplesPerPixel</td>
+
+<td VALIGN=TOP WIDTH="71%">The number of components per pixel. SamplesPerPixel
+is <i>usually </i>1 for bilevel, grayscale, and palette-color images. SamplesPerPixel
+is <i>usually </i>3 for RGB images.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="29%">T4Options</td>
+
+<td VALIGN=TOP WIDTH="71%">Used to determine 1 or 2 dimensional encoding
+and byte aligned rows for compression type 2.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="29%">PhotometricInterpretation</td>
+
+<td VALIGN=TOP WIDTH="71%">Used to determine if the data is black and white,
+pallete color, RGB color, CMYK color or grayscale. For black and white
+data, this also specifies if the zero pixel is either black or white</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="29%">FillOrder</td>
+
+<td VALIGN=TOP WIDTH="71%">The program supports the FillOrder tag.</td>
+</tr>
+</table>
+
+<p>The height, width and resolution tags are used to determine the physical
+page size. For example, an image 2,544 pixels wide and 3,287 pixels long
+and scanned at 300 DPI results in a PDF page size of 2,544/300 by 3,287/300,
+or 8.48 inches wide by 10.96 inches long. The resulting page size may not
+match a standard paper size, however, this is not a problem for viewers
+like Adobe Acrobat. The advantage to this method is that a multiple page
+conversion can contain images scanned at different sizes. This allows,
+for example, a converted PDF file to contain both U.S. letter and legal
+size pages, as well as differing European sizes (A1, A2, etc.) or even
+a combination of the two.
+<p>The screen output can be redirected to a file adding the DOS syntax
+">filename" to the end of the command line. This can be used to redirect
+output to a log file. The program returns an error code of 1 when a fatal
+error occurs, used in batch programs to test the success of the program.
+<p>The initialization file and the use of profiles is described in the
+<a href="convert.html">"DaVince
+Tools" Converters</a> page. In addition to the default profile, the following
+sample profiles are defined in the tiff2pdf.ini file that ships with the
+program:
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="638" >
+<tr>
+<td VALIGN=TOP WIDTH="50%"><b>Profile Name</b></td>
+
+<td VALIGN=TOP WIDTH="50%"><b>Description</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">quick</td>
+
+<td VALIGN=TOP WIDTH="50%">Best for compression speed, no bookmarks or
+thumbnails.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">quickbookmark</td>
+
+<td VALIGN=TOP WIDTH="50%">Best for compression speed, with bookmarks.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">archive</td>
+
+<td VALIGN=TOP WIDTH="50%">Best for optimal file size, no bookmarks or
+thumbnails.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">bookmark</td>
+
+<td VALIGN=TOP WIDTH="50%">Best for optimal file size, with bookmarks.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="50%">thumbnail</td>
+
+<td VALIGN=TOP WIDTH="50%">Best for optimal file size with bookmarks and
+thumbnails.</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<h2>
+Common Profile Settings</h2>
+Refer to the <a href="convert.html">"DaVince Tools" Converters</a> page
+for a description of the common profile settings.
+<h2>
+Converter Specific Settings</h2>
+The following table describes tiff2pdf settings that are unique to this
+converter (options are case insensitive):
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="603" >
+<tr>
+<td VALIGN=TOP WIDTH="38%"><b>Option</b></td>
+
+<td VALIGN=TOP WIDTH="23%"><b>Data Type</b></td>
+
+<td VALIGN=TOP WIDTH="38%"><b>Description</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Archive</td>
+
+<td VALIGN=TOP WIDTH="23%">Bool</td>
+
+<td VALIGN=TOP WIDTH="38%">When true, compress image data in an optimal
+manner. When archive option is set to true, converted page indicator is
+a plus sign ("+"). When archive option is set to false, converted page
+indicator is a period ("."). Archive mode is automatically turned on for
+image formats that are not supported natively in PDF (PackBits and CCITT
+Group 3 with unsupported Group 3 options are examples). The default is
+false.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">DamagedRowCount</td>
+
+<td VALIGN=TOP WIDTH="23%">Number</td>
+
+<td VALIGN=TOP WIDTH="38%">This parameter is used when a TIFF file was
+received from a Group 3 Facsimili device and contains transmission errors.
+Setting this parameter to a positive number will allow the PDF reader to
+accept files with damaged rows up to this value. A value of "1" or "2"
+may be sufficient for most users. This parameter is only used with Group
+3 files. Group 4 files are not affected. This option is not used when "archive"
+is set to true. By default, this value is "0" (no damaged rows allowed).</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">DefaultDPI</td>
+
+<td VALIGN=TOP WIDTH="23%">Number (in DPI)</td>
+
+<td VALIGN=TOP WIDTH="38%">Default resolution to use if resolution tag
+is not present. The program will assume 300 DPI if this option not present.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">MaxImageSize *</td>
+
+<td VALIGN=TOP WIDTH="23%">Number (in MB)</td>
+
+<td VALIGN=TOP WIDTH="38%">Maximum image size (in megabytes) in the PDF
+file. Images larger than this size will be split into 1 or more smaller
+images not to exceed this value. The default settings is 20 MB.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%">Transparency</td>
+
+<td VALIGN=TOP WIDTH="23%">Bool</td>
+
+<td VALIGN=TOP WIDTH="38%">When true, make image background transparent,
+useful with other programs that create watermarks. When false, make image
+background opaque. If using Acrobat Capture for OCR conversion with the
+resulting PDF file, this must be set to false. The default value is false.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="38%" HEIGHT="91">Thumbnail</td>
+
+<td VALIGN=TOP WIDTH="23%" HEIGHT="91">Bool</td>
+
+<td VALIGN=TOP WIDTH="38%" HEIGHT="91">Create thumbnail images. Note that
+this will increase processing time, even when the "Archive" option is set
+to false. The default is false.</td>
+</tr>
+</table>
+
+<p><a NAME="problem"></a>* New in 2.1
+<br>&nbsp;
+<br>&nbsp;
+<h2>
+Problem TIFF Files:</h2>
+Not all TIFF files can be converted with this application. One should verify
+the correctness of the conversion by viewing the PDF file with a PDF viewer.
+Listed below are reasons why a TIFF file may not be converted:
+<ul>
+<li>
+Monochrome, gray scale and color TIFF files with compression mode 1 (uncompressed),
+2 (Huffman), 3 (CCITT Group 3), 4 (CCITT Group 4) or 32773 (Packbits),
+are supported. Mode 5 compression (LZW), typically used for compressing
+color images, is supported only when "archive" is set to false. Indexed,
+RGB and CMYK color images are supported. JPEG compressed TIFF files are
+not supported.</li>
+
+<li>
+The following TIFF tags are required: ImageLength, ImageWidth, Compression,
+StripOffsets/TileOffsets and StripByteCounts/TileByteCounts. Most TIFF
+reading applications require these tags.</li>
+
+<li>
+Starting with version 1.1, the TIFF tag FillOrder is supported. Versions
+of tiff2pdf prior to version 1.1 will not convert these files.</li>
+
+<li>
+Not all CCITT compressed images can be copied to the PDF file unaltered.
+In particular, compressed images containing the T4Option tag with bit 2
+set can not be converted as-is, since there is no equivalent T4 option
+in the PDF specification. tiff2pdf will recompress this image if it detects
+this bit is set (Note: releases of tiff2pdf prior to version 2 generated
+an error). For a technical description about bit 2 in the T4Option tag,
+the TIFF 6 Specification describes it as follows:</li>
+</ul>
+
+<dir>
+<dir>
+<dir>
+<dir>Bit 2 is 1 if fill bits have been added as necessary before EOL codes
+such that EOL always ends on a byte boundary, thus ensuring an EOL-sequence
+of 1 byte preceded by a zero nibble: xxxx-0000 0000-0001.</dir>
+</dir>
+</dir>
+</dir>
+
+<ul>
+<li>
+Certain TIFF files generated with version 1.1.0 of tiff2pdf generated a
+"Read less image data than expected" error in Acrobat Reader and Exchange.
+This problem was fixed in version 1.1.1. If you still receive this error
+when using version 1.1.1 or later of tiff2pdf, then the image data may
+be at fault. Certain programs (typically older programs) that create TIFF
+files truncate the bottom of the page if there is no image data to display.
+Specifying an image height and then storing image data of a lesser height
+does not conform to industry practices and Acrobat complains about it.
+tiff2pdf also complains about it when generating a thumbnail for this image.
+Acrobat still allows viewing and printing of this image despite the error.
+To remove the error message you should recompress the image data by using
+a profile with the archive option enabled</li>
+</ul>
+
+<h2>
+<a NAME="newfeatures"></a>New Features / Changes:</h2>
+<a href="release.html#version">A list of new features and changes, along
+with a version history, can be found in the release notes.</a>
+<h2>
+<a NAME="information"></a>Additional Information:</h2>
+Any DaVince Tool product that creates a PDF must create an intermediate
+file prior to writing the PDF file. The filename of this intermediate file
+begins with "tmps" and appears in the directory pointed to by the environment
+variable "TMP". If this environment does not exist, then the temporary
+file is written in the current directory. The intermediate file exists
+only during the execution of the program.
+<h2>
+<a NAME="about"></a></h2>
+
+<h2>
+About DaVince Tools:</h2>
+Visit the <b>DaVince Tools</b> web site at <a href="http://www.davince.com/">http://www.davince.com</a>
+for the latest version of this software and the latest documentation. <b>DaVince
+Tools</b> is shareware and software registration is urged if you find these
+programs useful. You can register the software on-line at <a href="http://www.davince.com/">http://www.davince.com</a>.
+<p><b>DaVince Tools</b> was written in C++ using the <b>DaVince Class Library</b>,
+written by the same author as this program. The <b>DaVince Class Library</b>
+is a C++ library for developing PDF and TIFF applications. Contact the
+author at <a href="mailto:info@davince.com">info@davince.com</a> for more
+information on the availability of the class library.
+</body>
+</html>

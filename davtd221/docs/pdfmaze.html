@@ -1,0 +1,374 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Generator" content="Microsoft Word 97">
+   <meta name="Template" content="C:\Program Files\Microsoft Office\Office\HTML.DOT">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (Win98; U) [Netscape]">
+   <title>pdfmaze - Generate Maze Puzzles in PDF</title>
+</head>
+<body link="#0000FF" vlink="#800080">
+
+<center>
+<h1>
+pdfmaze – Generate Maze Puzzles in PDF</h1></center>
+
+<center>Version: 2.2
+<p>Part of <a href="summary.html">DaVince Tools</a>
+<br>Web Site: <a href="http://www.davince.com/">www.davince.com</a>
+<p>Last Modified: July 22, 2003</center>
+
+<p><a href="#syntax">Command Syntax</a>
+<p><a href="#description">Description</a>
+<p><a href="#information">Additional Information</a>
+<p><a href="#about">About DaVince Tools</a>
+<br>&nbsp;
+<br>&nbsp;
+<p>
+<hr>
+<h2>
+<a NAME="syntax"></a>Command Syntax:</h2>
+<i>(Please note that the square brackets "[" and "]" specify optional parameters;
+do not enter the brackets as part of the command)</i>
+<p>pdfmaze [-i key:value [-i key:value]] [-o outputfile] [-p profile] [-?]
+[count]
+<p><b>Arguments:</b>
+<p>-i: Specify Info dictionary attribute values like title and author of
+document. The following attributes are available for use:
+<br>&nbsp;
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="590" >
+<tr>
+<td VALIGN=TOP WIDTH="28%">
+<center><b>Attribute</b></center>
+</td>
+
+<td VALIGN=TOP WIDTH="72%">
+<center><b>Description</b></center>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="28%">Author</td>
+
+<td VALIGN=TOP WIDTH="72%">The name of the person who created the document.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="28%">Keywords</td>
+
+<td VALIGN=TOP WIDTH="72%">Key words associated with the document.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="28%">Subject</td>
+
+<td VALIGN=TOP WIDTH="72%">The subject of the document.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="28%">Title</td>
+
+<td VALIGN=TOP WIDTH="72%">The title of the document.</td>
+</tr>
+</table>
+
+<p>Note that the attribute names are case sensitive (first character in
+uppercase). This option can be specified multiple times when setting multiple
+dictionary attribute values. To specify an attribute along with its data,
+separate the two with a colon ":". You will need to enclose the string
+in quotes if there are spaces in the data. For example, to set the title
+of a document to "Jumbo Mazes", use the following parameter:
+<p>-i "Title:Jumbo Mazes"
+<p>In addition to these tags, custom tags can be used with this option;
+however, Acrobat Reader will not recognize them. The "CreationDate" and
+"Creator" attributes are automatically filled in by the program and cannot
+be overridden with this option.
+<p>-o: Specify the name of the PDF file to create. The ".pdf" extension
+should be included in the filename. If this option is not specified, the
+filename "maze.pdf" in the current directory is assumed.
+<p>-p: Specify a profile to use in the creation of the PDF file. Profiles
+contain maze page layout information such as margin and line widths and
+reside in the "pdfmaze.ini" file located in the windows base directory
+(typically "C:\WINDOWS"). The default profile "default" is used when this
+option is not specified.
+<p>-?: A brief summary of arguments is displayed.
+<p>[count]: Specify the number of mazes to generate. When a count is not
+specified, then a count of one is assumed.
+<h2>
+<a NAME="description"></a>Description:</h2>
+"pdfmaze" is a command line program that creates a PDF file of randomly
+generated maze puzzles. Features of this program include:
+<ul>
+<li>
+Various size mazes can be generated automatically</li>
+
+<li>
+Optionally create a solution page of the generated maze</li>
+
+<li>
+Large file support (1,000+ pages)</li>
+
+<li>
+Creates a version 1.2 PDF file with a unique file ID in trailer</li>
+
+<li>
+PDF file compression support</li>
+</ul>
+The program utilizes an initialization file named "pdfmaze.ini", which
+must be located in the Windows’ root directory (typically "C:\WINDOWS"
+for Windows 9x, "C:\WINNT" for Windows NT). This file contains settings
+dealing with page layout and other options. The file is divided into profiles,
+which can be specified by name on the command line. A profile begins with
+the name of the profile surrounded by square brackets. An example file
+is shown below:
+<p><tt>[largemaze]</tt>
+<br><tt>topmargin=36</tt>
+<br><tt>bottommargin=36</tt>
+<br><tt>leftmargin=72</tt>
+<br><tt>rightmargin=36</tt>
+<br><tt>width=50</tt>
+<br><tt>height=100</tt>
+<br><tt>orientation=portrait</tt>
+<br><tt>…</tt>
+<p>Multiple profiles can exist in the file. The "-p" command line option
+determines which profile the program will use. Profile names are case insensitive.
+<p>The screen output can be redirected to a file adding the DOS syntax
+">filename" to the end of the command line. This can used to redirect output
+to a log file. The program returns an error code of 1 when a fatal error
+occurs, used in batch programs to test the success of the program.
+<p>In addition to the default profile, the following profiles are defined
+in the pdfmaze.ini file that ships with the program:
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="638" >
+<tr>
+<td VALIGN=TOP WIDTH="23%"><b>Profile Name</b></td>
+
+<td VALIGN=TOP WIDTH="77%"><b>Description</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="23%">small</td>
+
+<td VALIGN=TOP WIDTH="77%">Small maze, 10 columns by 15 rows, suitable
+for children Pre-K and up</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="23%">medium</td>
+
+<td VALIGN=TOP WIDTH="77%">Medium maze, 10 columns by 25 rows, suitable
+for children first grade and up</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="23%">large</td>
+
+<td VALIGN=TOP WIDTH="77%">Large maze, 80 columns by 100 rows, suitable
+for teenagers and adults</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="23%">jumbo</td>
+
+<td VALIGN=TOP WIDTH="77%">Jumbo maze, 100 columns by 150 rows, suitable
+for teenagers and adults</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<p>Several option statements can appear after the profile line. These option
+statements have the following syntax:
+<p>option=value
+<p>Where option is the name of valid option (see below) and "value" is
+the value for the option. Depending on the option, "value" can be a number,
+a string or a Boolean value. The following values are all valid for a Boolean
+value:
+<br>&nbsp;
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="427" >
+<tr>
+<td VALIGN=TOP WIDTH="48%"><b>Valid True Values</b></td>
+
+<td VALIGN=TOP WIDTH="52%"><b>Valid False Values</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="48%">True, T, On, Enable, Yes, Y</td>
+
+<td VALIGN=TOP WIDTH="52%">False, F, Off, Disable, No, N</td>
+</tr>
+</table>
+
+<p>These values are case insensitive (i.e. both "true" and "TRUE" are valid).
+<p>The following table describes options allowed in the pdfmaze.ini file
+(options are case insensitive):
+<br>&nbsp;
+<table BORDER CELLPADDING=7 WIDTH="590" >
+<tr>
+<td VALIGN=TOP WIDTH="33%"><b>Option</b></td>
+
+<td VALIGN=TOP WIDTH="33%"><b>Data Type</b></td>
+
+<td VALIGN=TOP WIDTH="33%"><b>Description</b></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="33%">LeftMargin</td>
+
+<td VALIGN=TOP WIDTH="33%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="33%">The left margin</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="33%">RightMargin</td>
+
+<td VALIGN=TOP WIDTH="33%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="33%">The right margin</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="33%">TopMargin</td>
+
+<td VALIGN=TOP WIDTH="33%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="33%">The top margin</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="33%">BottomMargin</td>
+
+<td VALIGN=TOP WIDTH="33%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="33%">The bottom margin</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="33%">Width</td>
+
+<td VALIGN=TOP WIDTH="33%">Number (in cells)</td>
+
+<td VALIGN=TOP WIDTH="33%">The width of the maze, in maze cell units. Higher
+values create more complex mazes and take additional time to generate.
+The actual maze size is scaled to fit the page.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="33%">Height</td>
+
+<td VALIGN=TOP WIDTH="33%">Number (in cells)</td>
+
+<td VALIGN=TOP WIDTH="33%">The height of the maze, in maze cell units.
+Higher values create more complex mazes and take additional time to generate.
+The actual maze size is scaled to fit the page.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="33%">LineWidth</td>
+
+<td VALIGN=TOP WIDTH="33%">Number (in percentage of cell size, from 0.0
+to 1.0)</td>
+
+<td VALIGN=TOP WIDTH="33%">The width of the lines drawn within the maze,
+excluding the border.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="33%">BorderLineWidth</td>
+
+<td VALIGN=TOP WIDTH="33%">Number (in percentage of cell size, from 0.0
+to 1.0)</td>
+
+<td VALIGN=TOP WIDTH="33%">The width of the lines drawn for the maze border.
+This value is typically equal to or greater than the linewidth parameter.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="33%">Paper</td>
+
+<td VALIGN=TOP WIDTH="33%">letter | legal | executive | ledger | a0 | a1
+| a2 | a3 | a4 | a5 | a6 | a7 | a8 | a9 | a10</td>
+
+<td VALIGN=TOP WIDTH="33%">The paper size</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="33%">Orientation</td>
+
+<td VALIGN=TOP WIDTH="33%">Portrait | landscape</td>
+
+<td VALIGN=TOP WIDTH="33%">Paper orientation</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="33%">Compression</td>
+
+<td VALIGN=TOP WIDTH="33%">Bool</td>
+
+<td VALIGN=TOP WIDTH="33%">Use PDF Compression</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="33%">Solution</td>
+
+<td VALIGN=TOP WIDTH="33%">Bool</td>
+
+<td VALIGN=TOP WIDTH="33%">When set to true, a separate page containing
+the solution to the maze is created immediately following the original
+page. All original pages will be on odd pages and solution pages will be
+on even pages. Adobe Acrobat 4 users can print all odd pages or all even
+pages to print just the mazes or the solutions, respectively.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="33%">Arrow</td>
+
+<td VALIGN=TOP WIDTH="33%">Bool</td>
+
+<td VALIGN=TOP WIDTH="33%">When set to true, an arrow is printed at the
+start and end of the maze.</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP WIDTH="33%">ArrowSize</td>
+
+<td VALIGN=TOP WIDTH="33%">Number (in points)</td>
+
+<td VALIGN=TOP WIDTH="33%">This value is used when the Arrow option is
+enabled. This specifies the size of the arrow.</td>
+</tr>
+</table>
+
+<br>&nbsp;
+<p>All margin and arrow size parameters are specified in "points". A point
+is a unit of measurement equal to 1/72 of an inch. A 1/2 inch margin would
+be specified as 36 points
+<p>Beginning with Adobe Acrobat 4, you can copy the generated maze to the
+Windows clipboard by click and holding the text selection button until
+the graphic selection button appears, then selecting it. This will allow
+a user to define a rectangle maze image and allow the user to copy that
+image to a desktop publishing application or any other application that
+supports the Windows clipboard.
+<h2>
+<a NAME="information"></a>Additional Information:</h2>
+Any tool that creates a PDF must create an intermediate file prior to writing
+the PDF file. The filename of this intermediate file begins with "tmps"
+and appears in the directory pointed to by the environment variable "TMP".
+If this environment does not exist, then the temporary file is written
+in the current directory. The intermediate file exists only during the
+execution of the program.
+<h2>
+<a NAME="about"></a>About DaVince Tools:</h2>
+Visit the <b>DaVince Tools</b> web site at <a href="http://www.davince.com/">http://www.davince.com</a>
+for the latest version of this software and the latest documentation. DaVince
+Tools is shareware and software registration is urged if you find these
+programs useful. You can register the software on-line at <a href="http://www.davince.com/">http://www.davince.com</a>.
+<p><b>DaVince Tools</b> was written in C++ using the <b>DaVince Class Library</b>,
+written by the same author as this program. The <b>DaVince Class Library</b>
+is a C++ library for developing PDF and TIFF applications. Contact the
+author at <a href="mailto:info@davince.com">info@davince.com</a> for more
+information on the availability of the class library.
+</body>
+</html>

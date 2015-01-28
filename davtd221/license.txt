@@ -1,0 +1,11 @@
+The No-Nonsense License Agreement for DaVince Tools and DaVince Tools Plus
+
+* You are authorized to use the products, "DaVince Tools" and "DaVince
+Tools Plus", free for 30 days. After 30 days, you must either register one
+of these products or remove it from your computer.  Registration information
+is available at the website http://www.davince.com .
+
+* The author assumes no liability for damage caused by the software.
+
+* You can not resell the package in whole or in part without 
+authorization from the author. You can contact the author at info@davince.com

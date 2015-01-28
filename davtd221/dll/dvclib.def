@@ -1,0 +1,21 @@
+LIBRARY     DVCLIB.DLL
+
+EXPORTS
+    addPage                       =_addPage                       @11  
+    convertBuffer                 =_convertBuffer                 @15  
+    convertFile                   =_convertFile                   @14  
+    convertTiffBuffer             =_convertTiffBuffer             @10  
+    convertTiffFile               =_convertTiffFile               @9   
+    createHandle                  =_createHandle                  @1   
+    getInfoText                   =_getInfoText                   @17  
+    getPageCount                  =_getPageCount                  @16  
+    getPdfBuffer                  =_getPdfBuffer                  @6   
+    getTextLength                 =_getTextLength                 @18  
+    preparePdfBuffer              =_preparePdfBuffer              @5   
+    releaseHandle                 =_releaseHandle                 @8   
+    rewindPdfBuffer               =_rewindPdfBuffer               @7   
+    setInfo                       =_setInfo                       @2   
+    setParameter                  =_setParameter                  @3   
+    useFont                       =_useFont                       @12  
+    writePage                     =_writePage                     @13  
+    writePdf                      =_writePdf                      @4   

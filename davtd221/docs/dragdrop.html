@@ -1,0 +1,103 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Generator" content="Microsoft Word 97">
+   <meta name="Version" content="8.0.4308">
+   <meta name="Date" content="7/8/97">
+   <meta name="Template" content="C:\Program Files\Microsoft Office\Office\HTML.DOT">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (Win98; U) [Netscape]">
+   <title>Drag and Drop Conversion With DaVince Tools</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#800080">
+
+<center>
+<h1>
+Drag and Drop Conversion</h1></center>
+
+<center>Part of <a href="summary.html">DaVince Tools</a>
+<br>Web Site: <a href="http://www.davince.com/">www.davince.com</a>
+<p>Last Modified: December 13, 2001</center>
+
+<p>Drag and drop conversion is available in the <a href="wdavince.html">wdavince</a>
+application, the Windows interface to the "DaVince Tools" converters. Files
+and directories within the application, as well as files and directories
+from the Windows desktop can be dragged and dropped into the application.
+Refer to the <a href="wdavince.html">wdavince</a> documentation for more
+information on the drag and drop features of this application. This article
+describes configuring drag and drop for a specific converter without using
+the wdavince application.
+<p>Despite the DOS nature of the <b>DaVince Tools</b> converters, you can
+drag and drop JPEG, TIFF and text files from the Windows desktop to convert
+them to PDF. You can also drag and drop directories containing these files.
+The secret to this is to create a shortcut on the desktop for the appropriate
+DaVince Tools converter. The procedure for this varies depending on which
+version of Windows you are using, due to differences in shortcut functionality.
+The main difference is that Windows 2000 (and hopefully its successors)
+supports the use of command line options with drag and drop in the shortcut
+definition. With the other tested Windows flavors, 95/98/NT/ME, command
+line options in the shortcut definition were ignored when drag and drop
+was used. With this in mind, the following procedures were developed.
+<h2>
+Drag and Drop Configuration in Windows 95/98/NT/ME</h2>
+A batch file will need to be created for each converter and profile combination
+you wish to use for drag and drop. The batch file will also need to accept
+parameters, which will be used to "drop" the files into it. . For example,
+if you installed <b>DaVince Tools</b> in the "c:\dosapps\davince" directory,
+the following batch file "txt80x60.bat" can be used to convert text files
+using the "fixed-80x60" profile:
+<p><tt>@echo off</tt>
+<br><tt>c:\dosapps\davince\exe\txt2pdf.exe -p "fixed-80x60" -1 -o .\ %1
+%2 %3 %4 %5 %6 %7 %8 %9</tt>
+<br><tt>pause</tt>
+<p>Note that file above is 3 lines long, and the txt2pdf.exe line is not
+entered as two lines. The "-o" option tells the converter to place the
+PDF files in the current directory, which in fact is the working directory
+specified in the shortcut. Batch files support up to 9 parameters at a
+time, so you are limited to dragging up to 9 files and/or directories at
+a time.
+<p>The shortcut will have at least the command line and the working directory
+fields filled in. The command line will contain the batch file created
+as outlined above, and the working directory will point to the directory
+where the newly created PDF files will be placed. This could be a folder
+on your desktop, where you can easily retrieve the converted files.
+<p>You can drag not only single files, but also multiple files or directories
+into the shortcut. You will either get a single PDF file, or many PDF files
+in your working directory depending on if the "-1" option is used.
+<h2>
+Drag and Drop Configuration in Windows 2000</h2>
+The shortcut will contain the complete command line syntax for the appropriate
+program without the JPEG, TIFF or text filename. You can have one shortcut
+for "one to one conversion" and another for "many to one" conversion (version
+1.3 of txt2pdf now supports "one to one" conversion). The shortcut should
+have at least the command line and the working directory fields filled
+in. The command line will contain the <b>DaVince Tools</b> command and
+the working directory will point to the directory where the resulting PDF
+files will reside. The working directory will be where the newly created
+PDF files are placed. This could be a folder on your desktop, where you
+can easily retrieve the converted files. For example, if you installed
+<b>DaVince Tools</b> in the "c:\dosapps\davince" directory, the command
+line for converting text files using the "fixed-80x60" profile is:
+<dir>
+<dir><tt>c:\dosapps\davince\exe\txt2pdf.exe -p "fixed-80x60" -1 -o .\</tt></dir>
+</dir>
+Your command line will vary depending on where <b>DaVince Tools</b> is
+installed. The "-o" option above tells the converter to place the PDF files
+in the current directory, which in fact is the working directory specified
+in the shortcut.
+<p>You can drag not only single files, but also multiple files or directories
+into the shortcut. You will either get a single PDF file, or many PDF files
+in your working directory depending on if the "-1" option is used.
+<h2>
+About DaVince Tools:</h2>
+Visit the <b>DaVince Tools</b> web site at <a href="http://www.davince.com/">http://www.davince.com</a>
+for the latest version of this software and the latest documentation. <b>DaVince
+Tools</b> is shareware and software registration is urged if you find these
+programs useful. You can register the software on-line at <a href="http://www.davince.com/">http://www.davince.com</a>.
+<p><b>DaVince Tools</b> was written in C++ using the <b>DaVince Class Library</b>,
+written by the same author as this program. The <b>DaVince Class Library</b>
+is a C++ library for developing PDF and TIFF applications. Contact the
+author at <a href="mailto:info@davince.com">info@davince.com</a> for more
+information on the availability of the class library.
+</body>
+</html>
