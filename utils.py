@@ -23,7 +23,7 @@ def tiff2pdf(src_file):
     #exe =  join(os.path.dirname(os.path.abspath(__file__)), r'davtd221\exe\tiff2pdf.exe')
     exe = r'C:\Users\Julian\.qgis2\python\plugins\davtd221\exe\tiff2pdf.exe'
     os.system('%s -1 %s' % (exe, src_file))
-    os.remove(src_file)
+    #os.remove(src_file)
     
     
 def rm_empty_dirs(root):
