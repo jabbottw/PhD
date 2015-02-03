@@ -255,9 +255,10 @@ class COGCC_Download:
         apiOutputList = "API Numbers:\n"
         # output api variable to the API list text box
         for f in utFeatures:
-            aIndex = f.fieldNameIndex('API')
-            self.__apiList.append("%s" % (str('{0:.10g}'.format(f.attributes()[aIndex]))))
-            apiOutputList = "%s%s%s" % (apiOutputList,str('{0:.10g}'.format(f.attributes()[aIndex])),"\n")
+            aIndex = f.fieldNameIndex('api')
+	    print "aindex: %s" % aIndex
+            self.__apiList.append("%s" % (f.attributes()[aIndex]))
+            apiOutputList = "%s%s%s" % (apiOutputList,f.attributes()[aIndex],"\n")
         # clear api list text box
         self.dlg.clearAPITextBrowser()
         # set api list text box

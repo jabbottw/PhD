@@ -130,11 +130,12 @@ class Phd_Browser:
                                 ext = utils.get_ext(filePath)
                                 # set the extension on the current download
                                 try:
-                                    print filePath
-                                    if ext == 'PDF' or self.__current_file == 'log':
+                                    if ext == 'pdf' or self.__current_file == 'log':
                                         utils.set_file_ext(filePath, ext)
                                     else:
-                                        utils.tiff2pdf(filePath)
+                                        pass
+                                        # removing the tiff2pdf function. Most colorado files seem to pdf files now. (Except logs)
+                                        #utils.tiff2pdf(filePath)
                                 except:
                                     pass
                         else:
@@ -177,7 +178,7 @@ class Phd_Browser:
                 # Set the output file path, need to extend the extDict to include other mime types, (i.e. xml, word docs...)
                 # Use try block because we might encounter unknown media type
                 try:
-                    filePath = os.path.join(outputDir, "%s%s" % (seqNum, extDict[mime]))
+                    filePath = os.path.join(outputDir, "%s%s%s" % (seqNum, "_PhD_WellFile", extDict[mime]))
                 except:
                     filePath = os.path.join(outputDir, seqNum)
                 if r.status_code == 200:
