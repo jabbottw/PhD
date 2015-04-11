@@ -79,39 +79,45 @@ def copy_file(r, f, d):
     os.remove(src)
     
 
-def main(d):   
+
+def main(d, dtype): 
+    root = 'error'
     print d
     state_dict = {'05' : 'colorado', '43' : 'utah', '27' : 'nevada' }
     bsa_dict = {0 : '1-Colorado_Greater DJ Basin', 1 : '2-Colorado_Mountain Basins', 2 : '3-Colorado & Utah_Uinta-Piceance',
     3 : '4-Utah & Colorado_Greater Paradox Basin', 4 : '5-Nevada & Utah_Great Basin'}
-    root = r'H:\Final PhD Product Data - Basin Service Areas'
+    if (dtype == 'wellfiles'):
+        root = r'H:\Final PhD Product Data - Basin Service Areas'
+    elif (dtype == 'logs'):
+        root = r'H:\log_dir'
     files = os.listdir(d)
-    for f in files:
-        state = f[0:2]
-        county_id = f[2:5]
-        q = get_folder(state_dict[state], county_id)
-        if q:
-            print "File: %s" % f
-            bsa_folder = q[0][0]
-            print "Basin Service Area: %s" % bsa_folder
-            county_folder = q[0][1]
-            print "County: %s\n" % county_folder
-            if bsa_folder == bsa_dict[0] or bsa_folder == bsa_dict[1]:
-                out_folder = join(root, bsa_folder)
-                o_folder = join(out_folder, county_folder)
-                
-                if isdir(o_folder):
-                    copy_file(d, f, o_folder)
-            else:
-                out_folder = join(root, bsa_folder)
-                ou_folder = join(out_folder, state_dict[state].capitalize())
-                o_folder = join(ou_folder, county_folder)
-                if isdir(o_folder):
-                    copy_file(d, f, o_folder)
+    if root == 'error':
+        print "You didn't specify the correct file type \n i.e. ('wellfiles' or 'logs')"
+    else:
+        for f in files:
+            state = f[0:2]
+            county_id = f[2:5]
+            q = get_folder(state_dict[state], county_id)
+            if q:
+                print "File: %s" % f
+                bsa_folder = q[0][0]
+                print "Basin Service Area: %s" % bsa_folder
+                county_folder = q[0][1]
+                print "County: %s\n" % county_folder
+                if bsa_folder == bsa_dict[0] or bsa_folder == bsa_dict[1]:
+                    out_folder = join(root, bsa_folder)
+                    o_folder = join(out_folder, county_folder)
+                    
+                    if isdir(o_folder):
+                        copy_file(d, f, o_folder)
+                else:
+                    out_folder = join(root, bsa_folder)
+                    ou_folder = join(out_folder, state_dict[state].capitalize())
+                    o_folder = join(ou_folder, county_folder)
+                    if isdir(o_folder):
+                        copy_file(d, f, o_folder)
                 
         
 if __name__ == "__main__":
-    main(sys.argv[1])
-            
-            
+    main(sys.argv[1], sys.argv[2])
             
